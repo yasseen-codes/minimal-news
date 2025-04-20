@@ -13,90 +13,60 @@ import {
   PaginationItem,
   PaginationLink,
 } from "@/components/ui/pagination";
+import { formatTimeAgo } from "@/lib/utils";
 
-export default function Page() {
-  const stories = [
-    {
-      id: "1",
-      title: "Introducing the new Next.js compiler",
-      url: "https://nextjs.org/blog/next-13",
-      upvotes: 423,
-      comments: 127,
-      date: "3h",
-    },
-    {
-      id: "2",
-      title: "Introducing the new Next.js compiler",
-      url: "https://nextjs.org/blog/next-13",
-      upvotes: 423,
-      comments: 127,
-      date: "3h",
-    },
-    {
-      id: "3",
-      title: "Introducing the new Next.js compiler",
-      url: "https://nextjs.org/blog/next-13",
-      upvotes: 423,
-      comments: 127,
-      date: "3h",
-    },
-    {
-      id: "4",
-      title: "Introducing the new Next.js compiler",
-      url: "https://nextjs.org/blog/next-13",
-      upvotes: 423,
-      comments: 127,
-      date: "3h",
-    },
-    {
-      id: "5",
-      title: "Introducing the new Next.js compiler",
-      url: "https://nextjs.org/blog/next-13",
-      upvotes: 423,
-      comments: 127,
-      date: "3h",
-    },
-    {
-      id: "6",
-      title: "Introducing the new Next.js compiler",
-      url: "https://nextjs.org/blog/next-13",
-      upvotes: 423,
-      comments: 127,
-      date: "3h",
-    },
-    {
-      id: "7",
-      title: "Introducing the new Next.js compiler",
-      url: "https://nextjs.org/blog/next-13",
-      upvotes: 423,
-      comments: 127,
-      date: "3h",
-    },
-    {
-      id: "8",
-      title: "Introducing the new Next.js compiler",
-      url: "https://nextjs.org/blog/next-13",
-      upvotes: 423,
-      comments: 127,
-      date: "3h",
-    },
-    // ... more stories
-  ];
+const PER_PAGE = 30;
 
+type HNStory = {
+  id: number;
+  title: string;
+  url: string;
+  score: number;
+  descendants: number;
+  time: number;
+  by: string;
+};
+
+type ApiResponse = {
+  page: number;
+  totalPages: number;
+  stories: HNStory[];
+};
+
+async function fetchStories(page: number): Promise<ApiResponse | null> {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SITE_URL}/api/top?page=${page}`,
+    {
+      cache: "no-store",
+    },
+  );
+
+  if (!res.ok) {
+    return null;
+  }
+
+  return res.json();
+}
+
+export default async function Page() {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
 
   const page = parseInt(searchParams.get("page") || "1");
-  const perPage = 5;
-  const totalPages = Math.ceil(stories.length / perPage);
+
+  const apiResponse = await fetchStories(page);
+
+  if (!apiResponse) {
+    notFound();
+  }
+
+  const { stories, totalPages } = apiResponse;
 
   // 🚨 If invalid page number — go to NotFound
   if (page < 1 || page > totalPages) {
     notFound();
   }
-
-  const paginatedStories = stories.slice((page - 1) * perPage, page * perPage);
 
   const goToPage = (newPage: number) => {
     if (newPage < 1 || newPage > totalPages) return;
@@ -108,9 +78,18 @@ export default function Page() {
   return (
     <section className="flex flex-col gap-10">
       <ul className="flex max-w-full flex-col items-center gap-5 rounded-md">
-        {paginatedStories.map((story) => (
+        {stories.map((story) => (
           <li key={story.id} className="w-full">
-            <Story {...story} />
+            <Story
+              id={story.id.toString()}
+              title={story.title}
+              url={
+                story.url || `https://news.ycombinator.com/item?id=${story.id}`
+              }
+              upvotes={story.score}
+              comments={story.descendants}
+              date={formatTimeAgo(story.time)}
+            />
           </li>
         ))}
       </ul>
