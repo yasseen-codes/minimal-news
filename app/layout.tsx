@@ -1,22 +1,23 @@
 import type { Metadata } from "next";
-import { Inter, IBM_Plex_Mono, Libre_Baskerville } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 
-const InterSans = Inter({
+const InterSans = localFont({
+  src: "../public/fonts/Inter/Inter-VariableFont_opsz,wght.ttf",
   variable: "--font-sans",
-  subsets: ["latin"],
+  display: "swap",
 });
-const LibreBaskervilleSerif = Libre_Baskerville({
+const LibreBaskervilleSerif = localFont({
+  src: "../public/fonts/Libre_Baskerville/LibreBaskerville-Regular.ttf",
   variable: "--font-serif",
-  subsets: ["latin"],
-  weight: "400",
+  display: "swap",
 });
 
-const IBMPlexMono = IBM_Plex_Mono({
+const IBMPlexMono = localFont({
+  src: "../public/fonts/IBM_Plex_Mono/IBMPlexMono-Regular.ttf",
   variable: "--font-mono",
-  subsets: ["latin"],
-  weight: "100",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -30,16 +31,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={` ${InterSans.variable} ${LibreBaskervilleSerif.variable} ${IBMPlexMono.variable}  antialiased`}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           {children}
         </ThemeProvider>
       </body>
