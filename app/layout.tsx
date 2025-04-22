@@ -33,7 +33,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={` ${InterSans.variable} ${LibreBaskervilleSerif.variable} ${IBMPlexMono.variable}  antialiased`}
+        className={` ${InterSans.variable} ${LibreBaskervilleSerif.variable} ${IBMPlexMono.variable} antialiased`}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           {children}
