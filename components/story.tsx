@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 type StoryProps = {
   id: string;
   title: string;
-  url: string;
+  url?: string;
   upvotes: number;
   comments: number;
   date: string;
@@ -27,19 +27,19 @@ export function Story({ id, title, url, upvotes, comments, date }: StoryProps) {
       <div className="flex items-start gap-2">
         {/* Content */}
         <div className="flex-1">
-          <Link href={url}>
+          <Link href={"/"}>
             <h3 className="font-serif text-base font-medium text-pretty md:text-xl">
               {title}
             </h3>
           </Link>
-          <Link href={"/"}>
-            <span className="text-muted-foreground dark:hover:text-primary hover:text-primary border-foreground border-b-2 border-dotted font-mono text-xs break-all md:text-base">
-              {new URL(url).hostname}
-            </span>
-          </Link>
-
+          {url && (
+            <Link href={url}>
+              <span className="text-muted-foreground dark:hover:text-primary hover:text-primary border-foreground border-b-2 border-dotted font-mono text-xs break-all md:text-base">
+                {new URL(url).hostname}
+              </span>
+            </Link>
+          )}
           {/* Meta */}
-
           <div className="text-muted-foreground mt-3 flex items-center gap-4 font-sans text-xs md:text-sm">
             {/* Upvote Button */}
             <div className="flex items-center gap-1">

@@ -17,30 +17,29 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 import { cn } from "@/lib/utils";
-
-type RouteValue = "top" | "show" | "new" | "ask";
+import { routeValue } from "@/types/api";
 
 const routeMap = {
   top: {
-    path: "/top",
+    path: "/top/1",
     icon: <TrendingUp className="text-foreground h-4 w-4" />,
     label: "Top",
     shortcut: "t",
   },
   show: {
-    path: "/show",
+    path: "/show/1",
     icon: <Eye className="text-foreground h-4 w-4" />,
     label: "Show",
     shortcut: "s",
   },
   new: {
-    path: "/new",
+    path: "/new/1",
     icon: <Clock className="text-foreground h-4 w-4" />,
     label: "New",
     shortcut: "n",
   },
   ask: {
-    path: "/ask",
+    path: "/ask/1",
     icon: <MessageCircleQuestion className="text-foreground h-4 w-4" />,
     label: "Ask",
     shortcut: "a",
@@ -60,7 +59,7 @@ export default function Nav() {
       const key = e.key.toLowerCase();
       const route = Object.entries(routeMap).find(
         ([_, { shortcut }]) => shortcut === key,
-      )?.[0] as RouteValue | undefined;
+      )?.[0] as routeValue | undefined;
 
       if (route) {
         e.preventDefault();
@@ -123,7 +122,7 @@ export default function Nav() {
   );
 }
 
-function getCurrentRoute(pathname: string): RouteValue {
-  const route = pathname.split("/")[1] as RouteValue;
+function getCurrentRoute(pathname: string): routeValue {
+  const route = pathname.split("/")[1] as routeValue;
   return route in routeMap ? route : "top";
 }
