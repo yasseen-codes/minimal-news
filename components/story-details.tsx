@@ -26,7 +26,7 @@ const StoryDetails: React.FC<{ story: HNStoryItem }> = ({ story }) => {
   const hostname = story.url ? new URL(story.url).hostname : null;
 
   return (
-    <Card className="bg-background rounded-lg border-2 p-6 shadow-lg md:p-8">
+    <Card className="bg-background rounded-lg border p-6 shadow-lg md:p-8">
       <CardHeader className="p-0">
         <CardTitle className="mb-2 font-serif text-base leading-tight font-bold md:text-2xl">
           {story.title}
@@ -77,7 +77,7 @@ const StoryDetails: React.FC<{ story: HNStoryItem }> = ({ story }) => {
 
       {/* Only display content if it exists */}
       {story.text && (
-        <CardContent className="border-border border-t-2 p-0 pt-6 font-sans leading-relaxed md:text-xl">
+        <CardContent className="border-border border-t p-0 pt-6 font-sans leading-relaxed md:text-xl">
           <h3 className="mb-4 font-semibold">Description</h3>
           <div
             className="prose dark:prose-invert text-foreground max-w-none text-pretty"
@@ -91,7 +91,7 @@ const StoryDetails: React.FC<{ story: HNStoryItem }> = ({ story }) => {
         // Add an ID for the comments section to link to from the list page
         <CardContent
           id="comments"
-          className="border-border border-t-2 p-0 pt-6 md:text-xl"
+          className="border-border border-t p-0 pt-6 md:text-xl"
         >
           <h3 className="mb-4 font-semibold">Comments ({commentCount})</h3>
           {/* Adjusted heading size and added comment count */}
