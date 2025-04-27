@@ -4,15 +4,12 @@
 
 import { useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
-import { formatTimeAgo } from "@/lib/utils"; // Assuming formatTimeAgo is here
+import { formatTimeAgo } from "@/lib/utils";
 import { HNCommentItem } from "@/types/hn";
-
-// Define the type for a comment item, matching the relevant parts of HNItem
-// We'll use the HNItem structure directly for the recursive 'replies'
 
 // The individual Comment component
 const Comment: React.FC<{ comment: HNCommentItem }> = ({ comment }) => {
-  const [showReplies, setShowReplies] = useState(true); // Start with replies shown by default
+  const [showReplies, setShowReplies] = useState(false); // Start with replies folded by default
 
   // Do not render deleted or dead comments
   if (comment.deleted || comment.dead) {
@@ -24,14 +21,13 @@ const Comment: React.FC<{ comment: HNCommentItem }> = ({ comment }) => {
   const commentContent = { __html: comment.text || "" };
 
   return (
-    <div className="space-y-2 border-l-2 border-gray-200 pl-4 dark:border-gray-700">
+    <div className="border-accent dark:border-accent/50 space-y-4 border-l-2 pl-4">
       {/* Added border and padding for nesting */}
       {/* Comment Header */}
-      <div className="text-muted-foreground flex items-center justify-between text-sm">
-        <span className="font-mono font-medium">
+      <div className="text-muted-foreground flex items-center justify-between font-mono text-sm">
+        <span className="text-foreground font-semibold">
           {comment.by || "[deleted]"}
-        </span>{" "}
-        {/* Display author, or '[deleted]' */}
+        </span>
         {comment.time && (
           <span>{formatTimeAgo(comment.time)} ago</span> // Format the timestamp
         )}
@@ -39,15 +35,13 @@ const Comment: React.FC<{ comment: HNCommentItem }> = ({ comment }) => {
       {/* Comment Content */}
       {/* Render the HTML content */}
       <div
-        className="comment-content font-sans text-base leading-relaxed"
+        className="text-foreground prose dark:prose-invert prose-a:text-blue-500 max-w-none font-sans text-base leading-relaxed text-pretty"
         dangerouslySetInnerHTML={commentContent}
       />
       {/* Replies */}
       {/* Check if there are children comments to display */}
       {comment.children && comment.children.length > 0 && (
         <div className="mt-2">
-          {" "}
-          {/* Adjusted margin */}
           <button
             onClick={() => setShowReplies(!showReplies)}
             className="text-muted-foreground hover:text-primary flex items-center gap-1 text-sm"
@@ -55,11 +49,10 @@ const Comment: React.FC<{ comment: HNCommentItem }> = ({ comment }) => {
             {showReplies ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
             {showReplies
               ? "Collapse"
-              : `${comment.children.length} ${comment.children.length === 1 ? "reply" : "replies"}`}{" "}
-            {/* Dynamic reply count text */}
+              : `${comment.children.length} ${comment.children.length === 1 ? "reply" : "replies"}`}
           </button>
           {showReplies && (
-            <div className="mt-2 space-y-4">
+            <div className="mt-2 space-y-6">
               {/* Recursively render child comments */}
               {comment.children.map((reply) => (
                 // Pass the child comment (which is also an HNCommentItem) to a new Comment component
@@ -84,8 +77,7 @@ export const Comments: React.FC<{ comments: HNCommentItem[] }> = ({
   );
 
   return (
-    <div className="space-y-6">
-      {" "}
+    <div className="space-y-8">
       {/* Space between top-level comments */}
       {validComments.map((comment) => (
         // Render a Comment component for each top-level comment
