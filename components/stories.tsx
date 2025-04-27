@@ -157,7 +157,7 @@ export default async function Stories({
 
   return (
     <section className="flex flex-col gap-10">
-      <ul className="flex max-w-full flex-col items-center gap-5 rounded-md">
+      <ul className="flex max-w-full flex-col items-center gap-5">
         {/* Map over the fetched storiesForCurrentPage */}
         {storiesForCurrentPage.map((story) => (
           <li key={story.id} className="w-full">
