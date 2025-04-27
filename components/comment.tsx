@@ -35,7 +35,7 @@ const Comment: React.FC<{ comment: HNCommentItem }> = ({ comment }) => {
       {/* Comment Content */}
       {/* Render the HTML content */}
       <div
-        className="text-foreground prose dark:prose-invert prose-a:text-blue-500 max-w-none font-sans text-base leading-relaxed text-pretty"
+        className="text-foreground prose dark:prose-invert prose-a:text-secondary prose-a:break-all max-w-none font-sans text-base leading-relaxed text-pretty"
         dangerouslySetInnerHTML={commentContent}
       />
       {/* Replies */}
