@@ -83,15 +83,18 @@ export default function Nav() {
           <Button
             variant="outline"
             size="default"
-            className="hover:bg-muted hover:text-foreground flex items-center justify-between gap-2 px-3 text-sm hover:cursor-pointer md:text-base"
+            className="hover:bg-muted hover:text-foreground flex items-center justify-between gap-2 text-sm hover:cursor-pointer md:text-base"
           >
             <div className="flex items-center gap-2">
-              {routeMap[currentRoute].icon}
+              <span className="hidden md:block">
+                {routeMap[currentRoute].icon}
+              </span>
+
               <span className="font-sans font-medium">
                 {routeMap[currentRoute].label}
               </span>
             </div>
-            <ChevronDown className="h-4 w-4 opacity-50" />
+            <ChevronDown className="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent
