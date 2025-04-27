@@ -17,3 +17,13 @@ export function formatTimeAgo(unixTime: number): string {
   if (minutes > 0) return `${minutes}m`;
   return "just now";
 }
+
+export function formatCommentCount(count: number): string {
+  if (count === 0) {
+    return "0 comments"; // Or 'Discuss', depending on preference
+  } else if (count === 1) {
+    return "1 comment";
+  } else {
+    return `${count} comments`;
+  }
+}
