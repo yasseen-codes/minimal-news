@@ -46,6 +46,11 @@ const routeMap = {
   },
 };
 
+function getCurrentRoute(pathname: string): routeValue {
+  const route = pathname.split("/")[1] as routeValue;
+  return route in routeMap ? route : "top";
+}
+
 export default function Nav() {
   const router = useRouter();
   const pathname = usePathname();
@@ -82,7 +87,7 @@ export default function Nav() {
           >
             <div className="flex items-center gap-2">
               {routeMap[currentRoute].icon}
-              <span className="font-medium">
+              <span className="font-sans font-medium">
                 {routeMap[currentRoute].label}
               </span>
             </div>
@@ -100,7 +105,7 @@ export default function Nav() {
                 key={value}
                 onClick={() => router.push(path)}
                 className={cn(
-                  "focus:bg-secondary/50 focus:text-foreground my-1 flex w-full cursor-pointer items-center justify-between rounded px-2 py-1.5 text-sm",
+                  "focus:bg-secondary/50 focus:text-foreground my-1 flex w-full cursor-pointer items-center justify-between rounded px-2 py-1.5 font-sans text-sm",
                   currentRoute === value ? "bg-secondary" : "",
                 )}
               >
@@ -120,9 +125,4 @@ export default function Nav() {
       </DropdownMenu>
     </nav>
   );
-}
-
-function getCurrentRoute(pathname: string): routeValue {
-  const route = pathname.split("/")[1] as routeValue;
-  return route in routeMap ? route : "top";
 }
