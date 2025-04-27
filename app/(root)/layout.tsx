@@ -12,7 +12,7 @@ function Layout({
 }>) {
   return (
     <>
-      <header className="mx-7 my-7 flex items-center justify-between md:mx-25 md:my-15">
+      <header className="mx-4 my-4 flex items-center justify-between p-2 md:mx-25 md:my-15">
         <Link href="/">
           <Logo />
         </Link>
@@ -21,7 +21,7 @@ function Layout({
           <ThemeToggle />
         </div>
       </header>
-      <main className="mx-7 my-10 md:mx-25 md:my-15">{children}</main>
+      <main className="mx-4 my-6 p-2 md:mx-25 md:my-15">{children}</main>
     </>
   );
 }

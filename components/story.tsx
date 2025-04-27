@@ -37,7 +37,7 @@ export function Story({ id, title, url, upvotes, comments, date }: StoryProps) {
   ];
 
   return (
-    <article className="border-border hover:border-accent focus-visible:ring-ring relative w-full overflow-hidden border-b-2 py-4 transition-all duration-300 ease-in-out focus-within:px-1 focus:outline-none focus-visible:ring-2">
+    <article className="border-border hover:border-accent focus-visible:ring-ring relative w-full overflow-clip border-b-2 py-4 transition-all duration-300 ease-in-out focus:outline-none focus-visible:ring-2">
       <div className="flex flex-col">
         <Link href={`/story/${id}`}>
           <h3 className="text-foreground hover:text-primary block font-serif text-base font-medium text-pretty transition-colors duration-300 md:text-xl">
@@ -50,7 +50,7 @@ export function Story({ id, title, url, upvotes, comments, date }: StoryProps) {
               href={url}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-foreground mt-1 inline-block font-mono text-sm text-pretty break-all hover:underline md:text-base"
+              className="text-foreground mt-2 inline-block font-mono text-sm text-pretty break-all hover:underline md:text-base"
             >
               ({hostname})
             </Link>
@@ -58,7 +58,7 @@ export function Story({ id, title, url, upvotes, comments, date }: StoryProps) {
             <div />
           )}
 
-          <div className="text-foreground mt-2 flex items-center gap-4 font-sans text-xs md:mt-0 md:text-sm">
+          <div className="text-foreground mt-2 flex items-center gap-4 pr-0 font-sans text-xs md:mt-0 md:pr-2 md:text-sm">
             {metaItems.map((item) => {
               const Icon = item.icon; // Get the Lucide icon component
 
