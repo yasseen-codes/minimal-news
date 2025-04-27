@@ -14,7 +14,7 @@ export function BackButton() {
     <Button
       variant="outline" // Ghost variant for a subtle look
       onClick={() => router.back()} // Call router.back() on click
-      className="hover:text-foreground flex items-center gap-1 transition-colors" // Styling
+      className="hover:text-foreground hover:bg-muted flex items-center gap-1 transition-colors" // Styling
     >
       <ArrowLeft size={16} /> {/* Left arrow icon */}
       Back
