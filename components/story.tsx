@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { Clock, MessageCircleMore, CircleArrowUp } from "lucide-react";
-import { cn } from "@/lib/utils";
 
 type StoryProps = {
   id: string;

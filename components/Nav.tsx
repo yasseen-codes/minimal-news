@@ -63,7 +63,7 @@ export default function Nav() {
 
       const key = e.key.toLowerCase();
       const route = Object.entries(routeMap).find(
-        ([_, { shortcut }]) => shortcut === key,
+        ([, { shortcut }]) => shortcut === key, // The '_' here is unused
       )?.[0] as routeValue | undefined;
 
       if (route) {
