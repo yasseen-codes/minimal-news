@@ -39,7 +39,7 @@ export interface HNCommentItem {
   dead?: boolean; // Indicates if the comment is dead
 }
 
-export interface HNStoryItem {
+/* export interface HNStoryItem {
   id: number;
   title?: string; // Story title
   by?: string; // Author's username
@@ -50,4 +50,23 @@ export interface HNStoryItem {
   descendants?: number; // Comment count (optional, can get from children length)
   children?: HNCommentItem[]; // Top-level comments (fetched recursively by API)
   type?: "story"; // Ensure it's a story type
+} */
+
+export interface HNStoryItem {
+  id: number;
+  deleted?: boolean;
+  type?: "job" | "story" | "comment" | "poll" | "pollopt";
+  by?: string;
+  time?: number;
+  text?: string; // Content of the story (for Ask HN, etc.) or comment
+  dead?: boolean;
+  parent?: number;
+  poll?: number;
+  kids?: number[]; // Array of child item IDs (comments)
+  url?: string; // URL for stories
+  score?: number; // Score for stories
+  title?: string; // Title for stories
+  parts?: number[];
+  descendants?: number; //  Comment count for stories/polls
+  children?: HNCommentItem[]; //  Added in our API route for nested comments (comments are also HNItems)
 }
