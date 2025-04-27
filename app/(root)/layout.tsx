@@ -4,6 +4,7 @@ import Logo from "@/components/logo";
 import Nav from "@/components/nav";
 import { ThemeToggle } from "@/components/theme-toggle";
 import Link from "next/link";
+import { Footer } from "@/components/footer";
 
 function Layout({
   children,
@@ -22,6 +23,7 @@ function Layout({
         </div>
       </header>
       <main className="mx-4 my-6 p-2 md:mx-25 md:my-15">{children}</main>
+      <Footer />
     </>
   );
 }
