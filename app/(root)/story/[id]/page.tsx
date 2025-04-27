@@ -5,28 +5,11 @@ import { notFound } from "next/navigation"; // Import notFound for handling miss
 // Import the StoryDetails component
 import StoryDetails from "@/components/story-details";
 import { HNStoryItem } from "@/types/hn";
+import { BackButton } from "@/components/ui/back-button";
 
 // We'll define or import types for the fetched story data here
 // Based on our API route, the fetched item will match the HNItem structure
 // Ensure this interface matches the structure returned by your /api/story/[id] route
-interface HNItem {
-  id: number;
-  deleted?: boolean;
-  type?: "job" | "story" | "comment" | "poll" | "pollopt";
-  by?: string;
-  time?: number;
-  text?: string; // Content of the story (for Ask HN, etc.) or comment
-  dead?: boolean;
-  parent?: number;
-  poll?: number;
-  kids?: number[]; // Array of child item IDs (comments)
-  url?: string; // URL for stories
-  score?: number; // Score for stories
-  title?: string; // Title for stories
-  parts?: number[];
-  descendants?: number; // Comment count for stories/polls
-  children?: HNItem[]; // Added in our API route for nested comments (comments are also HNItems)
-}
 
 // Access the environment variable for the site URL
 // Provide a fallback for development if the variable is not set
@@ -89,7 +72,8 @@ export default async function StoryPage({
 
   // Render the StoryDetails component, passing the fetched story data
   return (
-    <div className="container max-w-full">
+    <div className="container max-w-full space-y-4">
+      <BackButton />
       {/* Pass the entire fetched story object to the StoryDetails component */}
       <StoryDetails story={story} />
     </div>
