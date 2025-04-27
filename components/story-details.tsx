@@ -41,7 +41,7 @@ const StoryDetails: React.FC<{ story: HNStoryItem }> = ({ story }) => {
           </Link>
         )}
 
-        <div className="text-muted-foreground flex flex-wrap items-center gap-x-6 gap-y-2 font-sans text-sm md:justify-between md:text-base">
+        <div className="text-muted-foreground flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-sm md:justify-between md:text-base">
           {story.by ? (
             <span>
               by <span className="text-foreground">{story.by}</span>
@@ -49,7 +49,7 @@ const StoryDetails: React.FC<{ story: HNStoryItem }> = ({ story }) => {
           ) : (
             <div />
           )}
-          <div className="flex items-center gap-4 pr-0 text-xs md:pr-2 md:text-sm">
+          <div className="flex items-center gap-3 pr-0 text-xs md:gap-4 md:text-sm">
             {story.score !== undefined && (
               <span className="flex items-center gap-1">
                 <ArrowUpCircle className="h-[14px] w-[14px] md:h-4 md:w-4" />
