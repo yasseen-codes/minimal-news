@@ -40,7 +40,7 @@ async function fetchItem(id: number): Promise<HNItem | null> {
         .filter((child): child is HNItem => child !== null)
         .map((child) => child.id); // Store only IDs in kids array for the parent item
 
-      (item as any).children = fetchedChildren.filter(
+      (item as HNItem).children = fetchedChildren.filter(
         (child): child is HNItem => child !== null,
       ); // Add a 'children' property to store the nested items
     }

@@ -25,6 +25,7 @@ export interface HNItem {
   title?: string;
   parts?: number[];
   descendants?: number; // Only for stories/polls
+  children?: HNItem[]; // Added for recursive fetching
 }
 
 export interface HNCommentItem {
@@ -38,19 +39,6 @@ export interface HNCommentItem {
   deleted?: boolean; // Indicates if the comment is deleted
   dead?: boolean; // Indicates if the comment is dead
 }
-
-/* export interface HNStoryItem {
-  id: number;
-  title?: string; // Story title
-  by?: string; // Author's username
-  time?: number; // Unix timestamp
-  text?: string; // Story content (for Ask HN, etc.)
-  url?: string; // URL for external links
-  score?: number; // Score (upvotes)
-  descendants?: number; // Comment count (optional, can get from children length)
-  children?: HNCommentItem[]; // Top-level comments (fetched recursively by API)
-  type?: "story"; // Ensure it's a story type
-} */
 
 export interface HNStoryItem {
   id: number;
