@@ -1,16 +1,14 @@
 // components/StoryContentLoader.tsx
 
 // This is a Server Component, it does not need 'use client'
-import { notFound } from "next/navigation"; // Import notFound
-import StoryDetails from "@/components/story-details"; // Import StoryDetails
-import { HNStoryItem } from "@/types/hn"; // Import HNStoryItem type
+import { notFound } from "next/navigation";
+import StoryDetails from "@/components/story-details";
+import { HNStoryItem } from "@/types/hn";
 
 // Access the environment variable for the site URL
-// Provide a fallback for development if the variable is not set
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
 // Function to fetch a single story item by its ID from our API route
-// This function should return the HNStoryItem type which includes the children
 async function fetchStory(id: string): Promise<HNStoryItem | null> {
   const apiRoute = `${SITE_URL}/api/story/${id}`;
   console.log(`Fetching story details from: ${apiRoute}`); // Log the URL being fetched
@@ -61,10 +59,8 @@ export default async function StoryDetailsLoader({
   const story = await fetchStory(storyId);
 
   // If the story was not found, render the Next.js notFound page
-  // Note: notFound() should ideally be called in the page component
-  // but for simplicity in this pattern, we handle it here.
   if (!story) {
-    notFound(); // This will stop rendering and show the not-found page
+    notFound();
   }
 
   // Render the StoryDetails component, passing the fetched story data
