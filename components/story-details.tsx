@@ -80,14 +80,14 @@ const StoryDetails: React.FC<{ story: HNStoryItem }> = ({ story }) => {
         <CardContent className="border-border border-t p-0 pt-6 font-sans leading-relaxed md:text-xl">
           <h3 className="mb-4 font-semibold">Description</h3>
           <div
-            className="prose dark:prose-invert text-foreground max-w-none text-pretty"
+            className="prose dark:prose-invert text-foreground prose-a:text-secondary md:prose-a:hover:text-accent prose-a:active:text-accent prose-a:break-all max-w-none text-pretty"
             dangerouslySetInnerHTML={storyContent}
           />
         </CardContent>
       )}
 
       {/* Render comments if there are any top-level comments or descendants count > 0 */}
-      {commentCount && (
+      {commentCount > 0 && (
         // Add an ID for the comments section to link to from the list page
         <CardContent
           id="comments"

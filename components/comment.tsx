@@ -83,9 +83,6 @@ export const Comments: React.FC<{ comments: HNCommentItem[] }> = ({
         // Render a Comment component for each top-level comment
         <Comment key={comment.id} comment={comment} />
       ))}
-      {validComments.length === 0 && (
-        <p className="text-muted-foreground text-sm italic">No comments yet.</p>
-      )}
     </div>
   );
 };

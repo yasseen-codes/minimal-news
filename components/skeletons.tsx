@@ -85,12 +85,12 @@ export function StoryDetailsSkeleton() {
       <div className="border-border mt-6 space-y-6 border-t pt-6">
         <Skeleton className="mb-4 h-6 w-1/4" />
         {/* Placeholder for a few comment skeletons */}
-        <div className="space-y-2 border-l-2 border-gray-200 pl-4 dark:border-gray-700">
+        <div className="border-accent/50 space-y-2 border-l-2 pl-4">
           <Skeleton className="h-4 w-1/4" />
           <Skeleton className="h-4 w-full" />
           <Skeleton className="h-4 w-5/6" />
         </div>
-        <div className="space-y-2 border-l-2 border-gray-200 pl-4 dark:border-gray-700">
+        <div className="border-accent/50 space-y-2 border-l-2 pl-4">
           <Skeleton className="h-4 w-1/4" />
           <Skeleton className="h-4 w-full" />
           <Skeleton className="h-4 w-5/6" />
