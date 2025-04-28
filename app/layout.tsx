@@ -7,7 +7,6 @@ const InterSans = localFont({
   src: "../public/fonts/Inter/Inter-VariableFont_opsz,wght.ttf",
   variable: "--font-sans",
   display: "swap",
-  preload: false,
 });
 const LibreBaskervilleSerif = localFont({
   src: "../public/fonts/Libre_Baskerville/LibreBaskerville-Regular.ttf",
