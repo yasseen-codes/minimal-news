@@ -13,7 +13,11 @@ async function fetchStoryIds(category: routeValue): Promise<number[] | null> {
   console.log(`Fetching story IDs from: ${url}`); // Log the URL being fetched
 
   try {
-    const response = await fetch(url);
+    const response = await fetch(url, {
+      // *** Add revalidation option here ***
+      // Revalidate the cache for this fetch every 60 seconds
+      next: { revalidate: 60 }, // Cache data for 60 seconds
+    });
 
     // Check if the response is OK (status code 200-299)
     if (!response.ok) {

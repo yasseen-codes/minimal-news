@@ -12,7 +12,17 @@ async function fetchItem(id: number): Promise<HNItem | null> {
   // console.log(`Fetching item: ${url}`); // Optional: Log each item fetch
 
   try {
-    const response = await fetch(url);
+    const response = await fetch(url, {
+      // *** Add caching/revalidation here ***
+      // Cache individual items. Main stories can be cached longer, comments shorter.
+      // We use a single revalidate time here, but you could make it conditional
+      // based on item.type if you fetched the type before the main fetch.
+      // For simplicity, let's use a moderate time suitable for comments (e.g., 5 mins).
+      // If you want main story details cached longer, you'd need a different approach
+      // or accept comments being cached for 1 hour too.
+      // Let's cache comments for 5 minutes, and main stories will also get this cache.
+      next: { revalidate: 300 }, // Cache for 5 minutes (adjust as needed)
+    });
 
     if (!response.ok) {
       console.error(

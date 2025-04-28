@@ -11,7 +11,14 @@ async function fetchItemDetails(id: number): Promise<HNStory | null> {
   // console.log(`Fetching item details from: ${url}`); // Optional: Log each item fetch
 
   try {
-    const response = await fetch(url);
+    const response = await fetch(url, {
+      // *** Add caching/revalidation option here ***
+      // Cache data for individual item details.
+      // Since details are mostly static, a longer cache time is appropriate.
+      next: { revalidate: 3600 }, // Cache data for 1 hour (adjust as needed)
+      // You could also use cache: 'force-cache' if you never expect details to change
+      // but revalidate allows for potential updates if HN API changes behavior.
+    });
 
     // Check if the response is OK
     if (!response.ok) {
