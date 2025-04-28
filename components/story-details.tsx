@@ -35,7 +35,7 @@ const StoryDetails: React.FC<{ story: HNStoryItem }> = ({ story }) => {
         {story.url && hostname && (
           <Link
             href={story.url}
-            className="text-foreground font-mono text-sm hover:underline md:text-lg"
+            className="text-foreground font-mono text-sm active:underline md:text-lg md:hover:underline"
           >
             ({hostname})
           </Link>

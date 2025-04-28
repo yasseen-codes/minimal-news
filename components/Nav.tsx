@@ -83,7 +83,7 @@ export default function Nav() {
           <Button
             variant="outline"
             size="default"
-            className="hover:bg-muted hover:text-foreground flex items-center justify-between gap-2 text-sm hover:cursor-pointer md:text-base"
+            className="md:hover:bg-muted md:hover:text-foreground flex items-center gap-2 text-sm hover:cursor-pointer md:text-base"
           >
             <div className="flex items-center gap-2">
               <span className="hidden md:block">
@@ -98,7 +98,7 @@ export default function Nav() {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent
-          className="animate-in fade-in-80 zoom-in-95 w-56 p-1"
+          className="animate-in fade-in-80 zoom-in-95 mr-2 w-56 p-1"
           align="start"
           sideOffset={8}
         >
@@ -108,8 +108,8 @@ export default function Nav() {
                 key={value}
                 onClick={() => router.push(path)}
                 className={cn(
-                  "focus:bg-secondary/50 focus:text-foreground my-1 flex w-full cursor-pointer items-center justify-between rounded px-2 py-1.5 font-sans text-sm",
-                  currentRoute === value ? "bg-secondary" : "",
+                  "focus:bg-accent/50 focus:text-foreground my-1 flex w-full cursor-pointer items-center justify-between px-2 py-1.5 font-sans text-sm",
+                  currentRoute === value ? "bg-accent dark:bg-accent/83" : "",
                 )}
               >
                 <div className="flex items-center gap-2">

@@ -35,7 +35,7 @@ const Comment: React.FC<{ comment: HNCommentItem }> = ({ comment }) => {
       {/* Comment Content */}
       {/* Render the HTML content */}
       <div
-        className="text-foreground prose dark:prose-invert prose-a:text-secondary prose-a:break-all max-w-none font-sans text-base leading-relaxed text-pretty"
+        className="text-foreground prose dark:prose-invert prose-a:text-secondary md:prose-a:hover:text-accent prose-a:active:text-accent prose-a:break-all max-w-none font-sans text-base leading-relaxed text-pretty"
         dangerouslySetInnerHTML={commentContent}
       />
       {/* Replies */}
@@ -44,7 +44,7 @@ const Comment: React.FC<{ comment: HNCommentItem }> = ({ comment }) => {
         <div className="mt-2">
           <button
             onClick={() => setShowReplies(!showReplies)}
-            className="text-muted-foreground hover:text-primary flex items-center gap-1 text-sm"
+            className="text-muted-foreground md:hover:text-primary active:text-primary flex items-center gap-1 text-sm"
           >
             {showReplies ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
             {showReplies
