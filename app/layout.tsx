@@ -3,7 +3,10 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { SITE_URL } from "@/types/hn";
+
+// Importing the Vercel Analytics and Speed Insights components
 import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const InterSans = localFont({
   src: "../public/fonts/Inter/Inter-VariableFont_opsz,wght.ttf",
