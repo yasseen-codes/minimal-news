@@ -8,7 +8,6 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 const MAX_STORY_IDS_TO_PROCESS = 300;
 
 // Function to fetch a single story item by its ID from our INTERNAL API route /api/story/[id]
-// Used for the story detail page and its metadata
 export async function fetchStory(id: string): Promise<HNStoryItem | null> {
   const apiRoute = `${SITE_URL}/api/story/${id}`;
   console.log(`Fetching story details from: ${apiRoute}`);
@@ -29,7 +28,7 @@ export async function fetchStory(id: string): Promise<HNStoryItem | null> {
 
     const storyItem: HNStoryItem = await response.json();
 
-    // Basic check (though your API route should ensure this)
+    // Ensure the fetched item is a valid story
     if (!storyItem || storyItem.type !== "story") {
       console.warn(
         `Fetched item with ID ${id} is not a valid story from internal API:`,
@@ -56,7 +55,7 @@ export async function fetchStoryListIds(
   console.log(`Fetching story IDs from internal API: ${apiRoute}`);
 
   try {
-    // This fetch call targets your internal API route.
+    // This fetch call targets from internal API route.
     const response = await fetch(apiRoute);
 
     if (!response.ok) {
@@ -68,7 +67,7 @@ export async function fetchStoryListIds(
 
     const ids: number[] = await response.json();
 
-    // Your internal API route should handle null/empty from external HN API
+    //  internal API route should handle null/empty from external HN API
     if (!ids) {
       console.warn(
         `No story IDs returned from internal API for type: ${category}`,
