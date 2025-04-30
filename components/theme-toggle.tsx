@@ -9,6 +9,8 @@ function ThemeToggle() {
   const { setTheme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
+  // When mounted on client, now we can show the UI
+  // This is important to avoid hydration errors when using next-themes
   useEffect(() => {
     setMounted(true);
   }, []);
