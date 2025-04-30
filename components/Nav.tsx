@@ -19,6 +19,7 @@ import { useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { routeValue } from "@/types/api";
 
+// Define the routes and their styles
 const routeMap = {
   top: {
     path: "/top/1",
@@ -58,19 +59,22 @@ export default function Nav() {
 
   // Keyboard shortcuts
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.ctrlKey || e.metaKey || e.altKey) return;
+    function handleKeyDown(kbdEvent: KeyboardEvent) {
+      // Ignore if any modifier keys are pressed
+      if (kbdEvent.ctrlKey || kbdEvent.metaKey || kbdEvent.altKey) return;
 
-      const key = e.key.toLowerCase();
+      const key = kbdEvent.key.toLowerCase();
+      // Check if the key pressed matches a route shortcut
       const route = Object.entries(routeMap).find(
-        ([, { shortcut }]) => shortcut === key, // The '_' here is unused
+        ([, { shortcut }]) => shortcut === key,
       )?.[0] as routeValue | undefined;
 
+      // If the key pressed matches a route shortcut, navigate to that route
       if (route) {
-        e.preventDefault();
+        kbdEvent.preventDefault();
         router.push(routeMap[route].path);
       }
-    };
+    }
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
@@ -85,6 +89,7 @@ export default function Nav() {
             size="default"
             className="md:hover:bg-muted md:hover:text-foreground flex items-center gap-2 text-sm hover:cursor-pointer md:text-base"
           >
+            {/* Icon and label for the current route */}
             <div className="flex items-center gap-2">
               <span className="sr-only md:not-sr-only">
                 {routeMap[currentRoute].icon}
@@ -102,6 +107,7 @@ export default function Nav() {
           align="start"
           sideOffset={8}
         >
+          {/* Map through the routeMap to create menu items */}
           {Object.entries(routeMap).map(
             ([value, { path, icon, label, shortcut }]) => (
               <DropdownMenuItem
