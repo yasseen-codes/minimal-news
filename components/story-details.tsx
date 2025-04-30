@@ -3,24 +3,19 @@
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { ArrowUpCircle, Clock, MessageCircleMore } from "lucide-react";
 import { Comments } from "./comment";
-import { formatCommentCount, formatTimeAgo } from "@/lib/utils";
-import { HNStoryItem } from "@/types/hn";
 import Link from "next/link";
 
-// The StoryDetails component
-const StoryDetails: React.FC<{ story: HNStoryItem }> = ({ story }) => {
+import { formatCommentCount, formatTimeAgo } from "@/lib/utils";
+import { HNStoryItem } from "@/types/hn";
+
+function StoryDetails({ story }: { story: HNStoryItem }) {
   // Use dangerouslySetInnerHTML for story text content (like Ask HN posts)
   const storyContent = { __html: story.text || "" };
 
   // Get top-level comments from the story's children array
   const topLevelComments = story.children || [];
 
-  // Determine the comment count to display
-  // Prioritize children length if available, otherwise use descendants
-  const commentCount =
-    topLevelComments.length > 0
-      ? topLevelComments.length
-      : (story.descendants ?? 0);
+  const commentCount = story.descendants ?? 0;
 
   // Determine the hostname for displaying next to the URL in the header if no story text
   const hostname = story.url ? new URL(story.url).hostname : null;
@@ -86,7 +81,7 @@ const StoryDetails: React.FC<{ story: HNStoryItem }> = ({ story }) => {
         </CardContent>
       )}
 
-      {/* Render comments if there are any top-level comments or descendants count > 0 */}
+      {/* Render comments if  descendants count > 0 */}
       {commentCount > 0 && (
         // Add an ID for the comments section to link to from the list page
         <CardContent
@@ -94,13 +89,12 @@ const StoryDetails: React.FC<{ story: HNStoryItem }> = ({ story }) => {
           className="border-border border-t p-0 pt-6 md:text-xl"
         >
           <h3 className="mb-4 font-semibold">Comments ({commentCount})</h3>
-          {/* Adjusted heading size and added comment count */}
           {/* Pass the top-level comments (children) to the Comments component */}
           <Comments comments={topLevelComments} />
         </CardContent>
       )}
     </Card>
   );
-};
+}
 
 export default StoryDetails;
