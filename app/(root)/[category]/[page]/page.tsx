@@ -44,6 +44,7 @@ export default async function Page({
 }) {
   const category = (await params).category;
   const pageNumber = parseInt((await params).page || "1");
+  const storiesPerPage = 30;
 
   const validRoutes: routeValue[] = ["top", "new", "ask", "show"];
   if (!validRoutes.includes(category)) {
@@ -73,12 +74,22 @@ export default async function Page({
     <>
       <h2 className="sr-only">{pageTitle}</h2>
 
-      <Suspense fallback={<StoriesListSkeleton />}>
-        <Stories pageNumber={pageNumber} route={category} />
+      <Suspense
+        fallback={<StoriesListSkeleton storiesPerPage={storiesPerPage} />}
+      >
+        <Stories
+          pageNumber={pageNumber}
+          route={category}
+          storiesPerPage={storiesPerPage}
+        />
       </Suspense>
 
       <Suspense fallback={<PaginationSkeleton />}>
-        <PaginationLoader pageNumber={pageNumber} route={category} />
+        <PaginationLoader
+          pageNumber={pageNumber}
+          route={category}
+          storiesPerPage={storiesPerPage}
+        />
       </Suspense>
     </>
   );

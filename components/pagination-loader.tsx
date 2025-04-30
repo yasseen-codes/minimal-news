@@ -13,15 +13,15 @@ import {
 
 import { fetchStoryListIds } from "@/lib/data";
 
-const STORIES_PER_PAGE = 30;
-
 const MAX_PAGINATION_LINKS = 5;
 
 // The PaginationLoader component fetches data and renders the pagination
 export default async function PaginationLoader({
+  storiesPerPage,
   pageNumber,
   route,
 }: {
+  storiesPerPage: number;
   pageNumber: number;
   route: routeValue;
 }) {
@@ -34,7 +34,7 @@ export default async function PaginationLoader({
 
   // Calculate the total number of pages based on fetched data
   const totalStories = allStoryIds.length;
-  const totalPages = Math.ceil(totalStories / STORIES_PER_PAGE);
+  const totalPages = Math.ceil(totalStories / storiesPerPage);
 
   // If only one page, no need for pagination
   if (totalPages <= 1) {
