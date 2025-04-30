@@ -35,10 +35,6 @@ async function fetchItemDetails(id: number): Promise<HNStory | null> {
       item.score === undefined ||
       item.descendants === undefined
     ) {
-      console.warn(
-        `Item with ID ${id} is not a valid story or missing data:`,
-        item,
-      );
       return null;
     }
 
