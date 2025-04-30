@@ -4,9 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { routeValue } from "@/types/api";
 import { HN_API_URL } from "@/types/hn";
 
-// Function to fetch a list of story IDs for a given category
 async function fetchStoryIds(category: routeValue): Promise<number[] | null> {
-  // Construct the correct API URL based on the category
   const url = `${HN_API_URL}/${category}stories.json`;
   console.log(`Fetching story IDs from: ${url}`);
 
@@ -40,10 +38,11 @@ async function fetchStoryIds(category: routeValue): Promise<number[] | null> {
     return null;
   }
 }
+
 // the request parameter is not used in this function, but it's part of the Next.js API route signature
 export async function GET(
   request: NextRequest,
-  { params }: { params: { category: routeValue } },
+  { params }: { params: Promise<{ category: routeValue }> },
 ) {
   const category = (await params).category;
 
@@ -56,7 +55,6 @@ export async function GET(
     );
   }
 
-  // Fetch the story IDs using the helper function
   const storyIds = await fetchStoryIds(category);
 
   // Check if fetching the IDs was successful
