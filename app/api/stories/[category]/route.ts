@@ -1,22 +1,19 @@
-import { NextRequest, NextResponse } from "next/server"; // For App Router
+// app/api/stories/[category]/route.ts
 
+import { NextRequest, NextResponse } from "next/server";
 import { routeValue } from "@/types/api";
-
-// Base URL for the Hacker News API
-const HN_API_BASE_URL = "https://hacker-news.firebaseio.com/v0";
+import { HN_API_URL } from "@/types/hn";
 
 // Function to fetch a list of story IDs for a given category
-// Using 'string' for category here, but you could use routeValue if imported
 async function fetchStoryIds(category: routeValue): Promise<number[] | null> {
   // Construct the correct API URL based on the category
-  const url = `${HN_API_BASE_URL}/${category}stories.json`;
-  console.log(`Fetching story IDs from: ${url}`); // Log the URL being fetched
+  const url = `${HN_API_URL}/${category}stories.json`;
+  console.log(`Fetching story IDs from: ${url}`);
 
   try {
     const response = await fetch(url, {
-      // *** Add revalidation option here ***
       // Revalidate the cache for this fetch every 60 seconds
-      next: { revalidate: 60 }, // Cache data for 60 seconds
+      next: { revalidate: 60 },
     });
 
     // Check if the response is OK (status code 200-299)
@@ -33,27 +30,24 @@ async function fetchStoryIds(category: routeValue): Promise<number[] | null> {
     // Hacker News API returns null if the list is empty or category is invalid
     if (!storyIds) {
       console.warn(`No story IDs returned for category: ${category}`);
-      return []; // Return an empty array if the API returns null or empty
+      return [];
     }
 
     return storyIds;
   } catch (error) {
     // Catch any network or other errors during the fetch
     console.error(`Failed to fetch story IDs for category ${category}:`, error);
-    return null; // Return null in case of an error
+    return null;
   }
 }
-
-// API Route Handler
-
+// the request parameter is not used in this function, but it's part of the Next.js API route signature
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ category: routeValue }> }, // Extract the dynamic segment 'category'
+  { params }: { params: { category: routeValue } },
 ) {
-  const category = (await params).category; // Get the category value from the URL
+  const category = (await params).category;
 
-  // Basic validation for the category parameter
-  const validCategories = ["top", "new", "ask", "show"];
+  const validCategories: routeValue[] = ["top", "new", "ask", "show"];
   if (!validCategories.includes(category)) {
     // Return a 400 Bad Request response for invalid categories
     return NextResponse.json(

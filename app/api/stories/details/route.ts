@@ -1,13 +1,57 @@
 // app/api/stories/details/route.ts
 
 import { NextRequest, NextResponse } from "next/server";
-import { HNStory } from "@/types/hn";
+import { HN_API_URL, HNStory } from "@/types/hn";
 
-const HN_API_BASE_URL = "https://hacker-news.firebaseio.com/v0";
+// API Route Handler (for App Router)
+// This function handles POST requests to /api/stories/details
+export async function POST(request: NextRequest) {
+  let itemIds: number[];
 
-async function fetchItemDetails(id: number): Promise<HNStory | null> {
+  try {
+    // Parse the request body to get the array of item IDs
+    const body = await request.json();
+
+    // Validate that the body is an array of numbers
+    if (!Array.isArray(body) || !body.every((id) => typeof id === "number")) {
+      return NextResponse.json(
+        {
+          error:
+            "Invalid request body. Expected an array of numbers (item IDs).",
+        },
+        { status: 400 },
+      );
+    }
+
+    itemIds = body;
+  } catch (error) {
+    // Handle errors during body parsing
+    console.error("Error parsing request body:", error);
+    return NextResponse.json({ error: "Invalid JSON body." }, { status: 400 });
+  }
+
+  // If no IDs are provided, return an empty array immediately
+  if (itemIds.length === 0) {
+    return NextResponse.json([]);
+  }
+
+  // Fetch details for all the provided item IDs concurrently
+  // Use Promise.all to wait for all fetch promises to settle
+  const itemPromises = itemIds.map((id) => fetchItemDetails(id));
+  const fetchedItems = await Promise.all(itemPromises);
+
+  // Filter out any items that failed to fetch or were not valid stories
+  const validStories: HNStory[] = fetchedItems.filter(
+    (item): item is HNStory => item !== null,
+  );
+
+  // Return the array of fetched and validated story details
+  return NextResponse.json(validStories);
+}
+
+export async function fetchItemDetails(id: number): Promise<HNStory | null> {
   // Construct the API URL for a specific item
-  const url = `${HN_API_BASE_URL}/item/${id}.json`;
+  const url = `${HN_API_URL}/item/${id}.json`;
   // console.log(`Fetching item details from: ${url}`); // Optional: Log each item fetch
 
   try {
@@ -67,50 +111,4 @@ async function fetchItemDetails(id: number): Promise<HNStory | null> {
     console.error(`Failed to fetch item details for ID ${id}:`, error);
     return null; // Return null in case of an error
   }
-}
-
-// API Route Handler (for App Router)
-// This function handles POST requests to /api/stories/details
-export async function POST(request: NextRequest) {
-  let itemIds: number[];
-
-  try {
-    // Parse the request body to get the array of item IDs
-    const body = await request.json();
-
-    // Validate that the body is an array of numbers
-    if (!Array.isArray(body) || !body.every((id) => typeof id === "number")) {
-      return NextResponse.json(
-        {
-          error:
-            "Invalid request body. Expected an array of numbers (item IDs).",
-        },
-        { status: 400 },
-      );
-    }
-
-    itemIds = body;
-  } catch (error) {
-    // Handle errors during body parsing
-    console.error("Error parsing request body:", error);
-    return NextResponse.json({ error: "Invalid JSON body." }, { status: 400 });
-  }
-
-  // If no IDs are provided, return an empty array immediately
-  if (itemIds.length === 0) {
-    return NextResponse.json([]);
-  }
-
-  // Fetch details for all the provided item IDs concurrently
-  // Use Promise.all to wait for all fetch promises to settle
-  const itemPromises = itemIds.map((id) => fetchItemDetails(id));
-  const fetchedItems = await Promise.all(itemPromises);
-
-  // Filter out any items that failed to fetch or were not valid stories
-  const validStories: HNStory[] = fetchedItems.filter(
-    (item): item is HNStory => item !== null,
-  );
-
-  // Return the array of fetched and validated story details
-  return NextResponse.json(validStories);
 }

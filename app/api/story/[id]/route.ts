@@ -1,14 +1,37 @@
 // app/api/story/[id]/route.ts (for App Router)
 
-import { HNItem } from "@/types/hn";
+import { HNItem, HN_API_URL } from "@/types/hn";
+
 import { NextRequest, NextResponse } from "next/server";
 
-// Base URL for the Hacker News API
-const HN_API_BASE_URL = "https://hacker-news.firebaseio.com/v0";
+// API Route Handler (for App Router)
+// This function handles GET requests to /api/story/[id]
+export async function GET(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }, // Extract the dynamic segment 'id'
+) {
+  const storyId = parseInt((await params).id); // Get the story ID from the URL
+
+  // Validate that the ID is a valid number
+  if (isNaN(storyId)) {
+    return NextResponse.json({ error: "Invalid story ID" }, { status: 400 });
+  }
+
+  // Fetch the main story item and its recursive comments
+  const storyItem = await fetchItem(storyId);
+
+  if (!storyItem || storyItem.type !== "story") {
+    // Return 404 if the item wasn't found or isn't a story
+    return NextResponse.json({ error: "Story not found" }, { status: 404 });
+  }
+
+  // Return the fetched story item (which now includes nested comments in 'children')
+  return NextResponse.json(storyItem);
+}
 
 // Function to fetch details for a single item by its ID (recursive for comments)
-async function fetchItem(id: number): Promise<HNItem | null> {
-  const url = `${HN_API_BASE_URL}/item/${id}.json`;
+export async function fetchItem(id: number): Promise<HNItem | null> {
+  const url = `${HN_API_URL}/item/${id}.json`;
   // console.log(`Fetching item: ${url}`); // Optional: Log each item fetch
 
   try {
@@ -60,29 +83,4 @@ async function fetchItem(id: number): Promise<HNItem | null> {
     console.error(`Failed to fetch item ID ${id}:`, error);
     return null;
   }
-}
-
-// API Route Handler (for App Router)
-// This function handles GET requests to /api/story/[id]
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }, // Extract the dynamic segment 'id'
-) {
-  const storyId = parseInt((await params).id); // Get the story ID from the URL
-
-  // Validate that the ID is a valid number
-  if (isNaN(storyId)) {
-    return NextResponse.json({ error: "Invalid story ID" }, { status: 400 });
-  }
-
-  // Fetch the main story item and its recursive comments
-  const storyItem = await fetchItem(storyId);
-
-  if (!storyItem || storyItem.type !== "story") {
-    // Return 404 if the item wasn't found or isn't a story
-    return NextResponse.json({ error: "Story not found" }, { status: 404 });
-  }
-
-  // Return the fetched story item (which now includes nested comments in 'children')
-  return NextResponse.json(storyItem);
 }
