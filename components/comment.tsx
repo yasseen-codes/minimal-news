@@ -1,15 +1,15 @@
 // components/Comment.tsx
 
-"use client"; // This component uses useState, so it needs to be a Client Component
+"use client";
 
 import { useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { formatTimeAgo } from "@/lib/utils";
 import { HNCommentItem } from "@/types/hn";
 
-// The individual Comment component
 const Comment: React.FC<{ comment: HNCommentItem }> = ({ comment }) => {
-  const [showReplies, setShowReplies] = useState(false); // Start with replies folded by default
+  // Start with replies folded by default
+  const [showReplies, setShowReplies] = useState(false);
 
   // Do not render deleted or dead comments
   if (comment.deleted || comment.dead) {
@@ -22,7 +22,6 @@ const Comment: React.FC<{ comment: HNCommentItem }> = ({ comment }) => {
 
   return (
     <div className="border-accent dark:border-accent/50 space-y-4 border-l-2 pl-4">
-      {/* Added border and padding for nesting */}
       {/* Comment Header */}
       <div className="text-muted-foreground flex items-center justify-between font-mono text-sm">
         <span className="text-foreground font-semibold">
@@ -33,7 +32,6 @@ const Comment: React.FC<{ comment: HNCommentItem }> = ({ comment }) => {
         )}
       </div>
       {/* Comment Content */}
-      {/* Render the HTML content */}
       <div
         className="text-foreground prose dark:prose-invert prose-a:text-secondary md:prose-a:hover:text-accent prose-a:active:text-accent prose-a:break-all max-w-none font-sans text-base leading-relaxed text-pretty"
         dangerouslySetInnerHTML={commentContent}
@@ -55,7 +53,6 @@ const Comment: React.FC<{ comment: HNCommentItem }> = ({ comment }) => {
             <div className="mt-2 space-y-6">
               {/* Recursively render child comments */}
               {comment.children.map((reply) => (
-                // Pass the child comment (which is also an HNCommentItem) to a new Comment component
                 <Comment key={reply.id} comment={reply} />
               ))}
             </div>
@@ -66,7 +63,6 @@ const Comment: React.FC<{ comment: HNCommentItem }> = ({ comment }) => {
   );
 };
 
-// The Comments container component
 // This component maps over an array of top-level comments (HNCommentItem[])
 export const Comments: React.FC<{ comments: HNCommentItem[] }> = ({
   comments,
@@ -78,7 +74,6 @@ export const Comments: React.FC<{ comments: HNCommentItem[] }> = ({
 
   return (
     <div className="space-y-8">
-      {/* Space between top-level comments */}
       {validComments.map((comment) => (
         // Render a Comment component for each top-level comment
         <Comment key={comment.id} comment={comment} />
