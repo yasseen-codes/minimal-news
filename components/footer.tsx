@@ -27,7 +27,7 @@ export function Footer() {
         </Link>
       </div>
       <Link
-        href="/"
+        href="https://github.com/yasseen-codes/minimal-news.git"
         target="_blank"
         rel="noopener noreferrer"
         className="hover:text-accent flex items-center gap-1 font-mono"
