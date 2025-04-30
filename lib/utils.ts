@@ -18,6 +18,10 @@ export function formatTimeAgo(unixTime: number): string {
   return "just now";
 }
 
+export function formatTimeISO(unixTime: number): string {
+  return new Date(unixTime * 1000).toISOString();
+}
+
 export function formatCommentCount(count: number): string {
   if (count === 0) {
     return "0 comments"; // Or 'Discuss', depending on preference
