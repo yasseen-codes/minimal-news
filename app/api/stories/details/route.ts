@@ -3,50 +3,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { HN_API_URL, HNStory } from "@/types/hn";
 
-export async function POST(request: NextRequest) {
-  let itemIds: number[];
-
-  try {
-    // Parse the request body to get the array of item IDs
-    const body = await request.json();
-
-    // Validate that the body is an array of numbers
-    if (!Array.isArray(body) || !body.every((id) => typeof id === "number")) {
-      return NextResponse.json(
-        {
-          error:
-            "Invalid request body. Expected an array of numbers (item IDs).",
-        },
-        { status: 400 },
-      );
-    }
-
-    itemIds = body;
-  } catch (error) {
-    // Handle errors during body parsing
-    console.error("Error parsing request body:", error);
-    return NextResponse.json({ error: "Invalid JSON body." }, { status: 400 });
-  }
-
-  // If no IDs are provided, return an empty array immediately
-  if (itemIds.length === 0) {
-    return NextResponse.json([]);
-  }
-
-  // Fetch details for all the provided item IDs concurrently
-  // Use Promise.all to wait for all fetch promises to settle
-  const itemPromises = itemIds.map((id) => fetchItemDetails(id));
-  const fetchedItems = await Promise.all(itemPromises);
-
-  // Filter out any items that failed to fetch or were not valid stories
-  const validStories: HNStory[] = fetchedItems.filter(
-    (item): item is HNStory => item !== null,
-  );
-
-  // Return the array of fetched and validated story details
-  return NextResponse.json(validStories);
-}
-
 async function fetchItemDetails(id: number): Promise<HNStory | null> {
   const url = `${HN_API_URL}/item/${id}.json`;
 
@@ -102,4 +58,48 @@ async function fetchItemDetails(id: number): Promise<HNStory | null> {
     console.error(`Failed to fetch item details for ID ${id}:`, error);
     return null;
   }
+}
+
+export async function POST(request: NextRequest) {
+  let itemIds: number[];
+
+  try {
+    // Parse the request body to get the array of item IDs
+    const body = await request.json();
+
+    // Validate that the body is an array of numbers
+    if (!Array.isArray(body) || !body.every((id) => typeof id === "number")) {
+      return NextResponse.json(
+        {
+          error:
+            "Invalid request body. Expected an array of numbers (item IDs).",
+        },
+        { status: 400 },
+      );
+    }
+
+    itemIds = body;
+  } catch (error) {
+    // Handle errors during body parsing
+    console.error("Error parsing request body:", error);
+    return NextResponse.json({ error: "Invalid JSON body." }, { status: 400 });
+  }
+
+  // If no IDs are provided, return an empty array immediately
+  if (itemIds.length === 0) {
+    return NextResponse.json([]);
+  }
+
+  // Fetch details for all the provided item IDs concurrently
+  // Use Promise.all to wait for all fetch promises to settle
+  const itemPromises = itemIds.map((id) => fetchItemDetails(id));
+  const fetchedItems = await Promise.all(itemPromises);
+
+  // Filter out any items that failed to fetch or were not valid stories
+  const validStories: HNStory[] = fetchedItems.filter(
+    (item): item is HNStory => item !== null,
+  );
+
+  // Return the array of fetched and validated story details
+  return NextResponse.json(validStories);
 }
