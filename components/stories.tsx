@@ -1,10 +1,13 @@
+// components/stories.tsx
+
 import { Story } from "@/components/story";
 import { formatTimeAgo } from "@/lib/utils";
-import { routeValue } from "@/types/api"; // Assuming routeValue is defined here
-import { HNStory } from "@/types/hn"; // Assuming HNStory is defined here
-import { redirect } from "next/navigation"; // Import redirect
+import { routeValue } from "@/types/api";
 
-// Import shadcn/ui Pagination components
+import { redirect } from "next/navigation";
+
+import { fetchStoryListIds, fetchStoriesWithDetails } from "@/lib/data";
+
 import {
   Pagination,
   PaginationContent,
@@ -12,19 +15,11 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from "@/components/ui/pagination"; // Adjust the import path based on your shadcn setup
+} from "@/components/ui/pagination";
 
-// Define the number of stories to show per page
 const STORIES_PER_PAGE = 30;
-// Define the maximum number of pages to display in the pagination control
-const MAX_PAGINATION_LINKS = 5;
-// Define the maximum number of story IDs to process from the initial fetch
-// Updated to 300 as requested
-const MAX_STORY_IDS_TO_PROCESS = 300;
 
-// Access the environment variable for the site URL
-// Provide a fallback for development if the variable is not set
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+const MAX_PAGINATION_LINKS = 5;
 
 export default async function Stories({
   page,
@@ -33,42 +28,25 @@ export default async function Stories({
   page: number;
   route: routeValue;
 }) {
-  // --- START: Fetching the full list of story IDs from our API route ---
-  // Use the SITE_URL environment variable to construct the full API route URL
-  const listApiRoute = `${SITE_URL}/api/stories/${route}`;
-  let allStoryIds: number[] = [];
+  const allStoryIds = await fetchStoryListIds(route);
 
-  try {
-    const response = await fetch(listApiRoute);
-
-    if (!response.ok) {
-      console.error(
-        `Error fetching story IDs from ${listApiRoute}: ${response.status} ${response.statusText}`,
-      );
-      // Depending on how you want to handle errors, you might render an error message
-      // or return an empty state. For now, we proceed with an empty array.
-    } else {
-      const fetchedIds = await response.json();
-      // Ensure fetchedIds is actually an array of numbers
-      if (
-        Array.isArray(fetchedIds) &&
-        fetchedIds.every((id) => typeof id === "number")
-      ) {
-        // --- Modification: Limit the number of story IDs to process ---
-        allStoryIds = fetchedIds.slice(0, MAX_STORY_IDS_TO_PROCESS);
-        // --- End Modification ---
-      } else {
-        console.error(
-          `API route ${listApiRoute} did not return an array of numbers.`,
-        );
-        allStoryIds = []; // Reset to empty array if data is unexpected
-      }
-    }
-  } catch (error) {
-    console.error(`Failed to fetch story IDs from ${listApiRoute}:`, error);
-    // Handle network or other errors during the initial fetch
+  // Handle error or no IDs fetched by the data fetching function
+  // fetchStoryListIds returns null on error, [] if API returns null/empty
+  if (!allStoryIds || allStoryIds.length === 0) {
+    // You might want to render a specific message here if no stories are found
+    // This component is inside Suspense, so an empty state is fine.
+    return (
+      <section className="flex flex-col gap-10">
+        <ul className="flex max-w-full flex-col items-center gap-5">
+          <li className="text-muted-foreground w-full text-center text-base italic">
+            Failed to load stories or no stories available.
+          </li>
+        </ul>
+        {/* Optionally render a disabled pagination skeleton or message */}
+        {/* <PaginationSkeleton /> // If you had one */}
+      </section>
+    );
   }
-  // --- END: Fetching the full list of story IDs ---
 
   // Calculate the total number of pages based on fetched data
   const totalStories = allStoryIds.length;
@@ -86,7 +64,7 @@ export default async function Stories({
     // Handle case where there are no stories but user is not on page 1
     redirect(`/${route}/1`);
   }
-  // If totalPages is 0 and page is 1, we just render an empty list.
+  // If totalPages is 0 and page is 1, we just render an empty list (handled above).
   // --- END: Handle invalid page numbers ---
 
   // Calculate the start and end indices for the current page
@@ -96,46 +74,11 @@ export default async function Stories({
   // Get the story IDs for the current page
   const currentPageStoryIds = allStoryIds.slice(startIndex, endIndex);
 
-  // --- START: Fetching details for the current page's stories from our API route ---
-  let storiesForCurrentPage: HNStory[] = [];
-  // Use the SITE_URL environment variable to construct the full API route URL
-  const detailsApiRoute = `${SITE_URL}/api/stories/details`;
-
-  // Only fetch details if there are story IDs for the current page
-  if (currentPageStoryIds.length > 0) {
-    try {
-      const response = await fetch(detailsApiRoute, {
-        method: "POST", // Use POST method as designed
-        headers: {
-          "Content-Type": "application/json", // Specify content type
-        },
-        body: JSON.stringify(currentPageStoryIds), // Send the array of IDs in the body
-      });
-
-      if (!response.ok) {
-        console.error(
-          `Error fetching story details from ${detailsApiRoute}: ${response.status} ${response.statusText}`,
-        );
-        // Handle error fetching details (e.g., show a message)
-      } else {
-        const fetchedStories = await response.json();
-        // Ensure fetchedStories is an array of HNStory
-        if (Array.isArray(fetchedStories)) {
-          storiesForCurrentPage = fetchedStories;
-        } else {
-          console.error(
-            `API route ${detailsApiRoute} did not return an array.`,
-          );
-        }
-      }
-    } catch (error) {
-      console.error(
-        `Failed to fetch story details from ${detailsApiRoute}:`,
-        error,
-      );
-      // Handle network or other errors during details fetch
-    }
-  }
+  // --- START: Fetching details for the current page's stories using the helper function ---
+  // This call is now delegated to the function in lib/data.ts
+  // Removed the try/catch block as error handling is now inside fetchStoriesWithDetails
+  const storiesForCurrentPage =
+    await fetchStoriesWithDetails(currentPageStoryIds);
   // --- END: Fetching details for the current page's stories ---
 
   // Calculate the range of pagination links to display
@@ -164,7 +107,7 @@ export default async function Stories({
             <Story
               id={story.id.toString()}
               title={story.title}
-              // Use the story.url if available, otherwise construct the HN item URL
+              // Use the story.url if available, otherwise undefined
               url={story.url || undefined}
               upvotes={story.score}
               comments={story.descendants}
@@ -173,17 +116,20 @@ export default async function Stories({
             />
           </li>
         ))}
-        {/* Optional: Display a message if no stories are found */}
+        {/* Optional: Display a message if no stories are found for this specific page */}
+        {/* This case should ideally be handled by the redirect logic in the page component,
+             but this provides a fallback if the API returns an empty array for details */}
         {storiesForCurrentPage.length === 0 && allStoryIds.length > 0 && (
-          <li className="w-full text-center text-gray-500 dark:text-gray-400">
+          <li className="text-muted-foreground w-full text-center text-base italic">
             No stories found for this page.
           </li>
         )}
-        {storiesForCurrentPage.length === 0 && allStoryIds.length === 0 && (
-          <li className="w-full text-center text-gray-500 dark:text-gray-400">
-            Failed to load stories or no stories available.
-          </li>
-        )}
+        {/* The fallback for allStoryIds.length === 0 is now handled at the top */}
+        {/* {storiesForCurrentPage.length === 0 && allStoryIds.length === 0 && (
+            <li className="w-full text-center text-gray-500 dark:text-gray-400">
+                Failed to load stories or no stories available.
+            </li>
+        )} */}
       </ul>
 
       {/* Shadcn UI Pagination Component */}
