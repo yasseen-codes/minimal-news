@@ -1,3 +1,8 @@
+export const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+
+export const HN_API_URL = "https://hacker-news.firebaseio.com/v0";
+
 export type HNStory = {
   id: number;
   title: string;
