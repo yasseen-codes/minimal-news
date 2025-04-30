@@ -44,7 +44,7 @@ const StoryDetails: React.FC<{ story: HNStoryItem }> = ({ story }) => {
         <div className="text-muted-foreground flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-sm md:justify-between md:text-base">
           {story.by ? (
             <span>
-              by <span className="text-foreground">{story.by}</span>
+              by <span className="text-foreground font-bold">{story.by}</span>
             </span>
           ) : (
             <div />

@@ -3,50 +3,7 @@
 // This is a Server Component, it does not need 'use client'
 import { notFound } from "next/navigation";
 import StoryDetails from "@/components/story-details";
-import { HNStoryItem } from "@/types/hn";
-
-// Access the environment variable for the site URL
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
-
-// Function to fetch a single story item by its ID from our API route
-async function fetchStory(id: string): Promise<HNStoryItem | null> {
-  const apiRoute = `${SITE_URL}/api/story/${id}`;
-  console.log(`Fetching story details from: ${apiRoute}`); // Log the URL being fetched
-
-  try {
-    // This fetch call will suspend this component until it completes
-    const response = await fetch(apiRoute);
-
-    if (!response.ok) {
-      // If the API route returns 404, it means the story wasn't found
-      if (response.status === 404) {
-        console.warn(`Story with ID ${id} not found via API route.`);
-        return null; // Indicate story not found
-      }
-      console.error(
-        `Error fetching story details from ${apiRoute}: ${response.status} ${response.statusText}`,
-      );
-      // For other errors, you might want to throw or return null
-      return null;
-    }
-
-    const storyItem: HNStoryItem = await response.json();
-
-    // Basic check to ensure we got a valid story item of type 'story'
-    if (!storyItem || storyItem.type !== "story") {
-      console.warn(
-        `Fetched item with ID ${id} is not a valid story:`,
-        storyItem,
-      );
-      return null;
-    }
-
-    return storyItem;
-  } catch (error) {
-    console.error(`Failed to fetch story details for ID ${id}:`, error);
-    return null;
-  }
-}
+import { fetchStory } from "@/lib/data";
 
 // The StoryContentLoader component fetches the data and renders StoryDetails
 export default async function StoryDetailsLoader({
