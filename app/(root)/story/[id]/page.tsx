@@ -11,8 +11,6 @@ import StoryDetailsLoader from "@/components/story-details-loader";
 
 import { formatTimeISO } from "@/lib/utils";
 
-// The dynamic page component for displaying a single story
-
 export default async function StoryPage({
   params,
 }: {
@@ -26,7 +24,6 @@ export default async function StoryPage({
       <BackButton />
 
       <Suspense fallback={<StoryDetailsSkeleton />}>
-        {/* Render the loader component and pass the storyId */}
         <StoryDetailsLoader storyId={storyId} />
       </Suspense>
     </div>
@@ -45,11 +42,7 @@ export async function generateMetadata({
   // Next.js automatically de-duplicates fetch calls for the same URL
   const story = await fetchStory(storyId);
 
-  // Construct the dynamic title
-
   const title = story?.title || "Story Not Found";
-
-  // Construct a dynamic description
 
   const description = story?.text
     ? story.text.substring(0, 160) + "..." // Use first 160 chars of text if story.text exists
@@ -58,41 +51,34 @@ export async function generateMetadata({
       : "The requested story could not be found on Minimal News."; // Fallback description if story is null
 
   return {
-    title: title, // Use the dynamic title
-    description: description, // Use the dynamic description
+    title: title,
+    description: description,
 
     // Open Graph tags for social media sharing previews
     openGraph: {
-      title: title, // Use the dynamic title
-      description: description, // Use the dynamic description
-      // Use optional chaining for story.id, fallback to SITE_URL if story is null
+      title: title,
+      description: description,
       url: story?.id ? `${SITE_URL}/story/${story.id}` : SITE_URL,
       siteName: "Minimal News", // Your site name
-      // Type is article if story exists, otherwise website
       type: story ? "article" : "website",
-      // Add an image if you have one related to stories, or use a default site image
-      images: [`${SITE_URL}/minimal-news-logo.png`], // Ensure this URL is correct
-
-      // Use optional chaining for story.by, fallback if story is null
+      images: [`${SITE_URL}/minimal-news-logo.png`],
       authors: story?.by ? [story.by] : ["Hacker News"],
-      // Use optional chaining for story.time, format if it exists, otherwise undefined
       publishedTime: story?.time ? formatTimeISO(story.time) : undefined,
-      modifiedTime: story?.time ? formatTimeISO(story.time) : undefined, // Use published time if no modified time
+      modifiedTime: story?.time ? formatTimeISO(story.time) : undefined,
     },
 
     // Twitter Card tags for Twitter sharing previews
     twitter: {
-      card: "summary", // Or 'summary_large_image'
-      title: title, // Use the dynamic title
-      description: description, // Use the dynamic description
-      // Add an image if you have one related to stories, or use a default site image
-      images: [`${SITE_URL}/minimal-news-logo.png`], // Ensure this URL is correct
+      card: "summary",
+      title: title,
+      description: description,
+
+      images: [`${SITE_URL}/minimal-news-logo.png`],
       // creator: '@yourtwitterhandle', // Your Twitter handle
     },
 
     // Canonical URL for this specific story page
     alternates: {
-      // Use optional chaining for story.id, fallback to SITE_URL if story is null
       canonical: story?.id ? `${SITE_URL}/story/${story.id}` : SITE_URL,
     },
   };
