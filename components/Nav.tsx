@@ -86,7 +86,7 @@ export default function Nav() {
             className="md:hover:bg-muted md:hover:text-foreground flex items-center gap-2 text-sm hover:cursor-pointer md:text-base"
           >
             <div className="flex items-center gap-2">
-              <span className="hidden md:block">
+              <span className="sr-only md:not-sr-only">
                 {routeMap[currentRoute].icon}
               </span>
 
