@@ -9,7 +9,7 @@ type StoryProps = {
   url?: string;
   upvotes: number;
   comments: number;
-  date: string; // Assuming this is already formatted time ago string
+  date: string;
 };
 
 export function Story({ id, title, url, upvotes, comments, date }: StoryProps) {
