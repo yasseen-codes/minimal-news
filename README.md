@@ -2,7 +2,7 @@
 
 A fast, minimal, and eye-relaxed Hacker News reader built with Next.js and Tailwind CSS. This project focuses on a clean user interface and efficient data fetching using modern web technologies.
 
-[Minimal News]()
+[Minimal News](https://minimal-news-seven.vercel.app/)
 
 ## **🚀 Features**
 
