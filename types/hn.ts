@@ -61,5 +61,5 @@ export interface HNStoryItem {
   title?: string; // Title for stories
   parts?: number[];
   descendants?: number; //  Comment count for stories/polls
-  children?: HNCommentItem[]; //  Added in our API route for nested comments (comments are also HNItems)
+  children?: HNCommentItem[]; //  for nested comments (comments are also HNItems)
 }
