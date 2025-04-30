@@ -1,0 +1,16 @@
+# public/robots.txt
+
+# This file tells search engine crawlers which pages they can access.
+
+User-agent: *
+# Allow all crawlers to access the entire site by default
+Allow: /
+
+# If you had specific paths you wanted to disallow (e.g., admin pages), you would add:
+# Disallow: /admin/
+# Disallow: /private/
+
+# Point to your sitemap file (we will create this next)
+# Replace YOUR_DEPLOYED_SITE_URL with your actual site URL
+Sitemap: YOUR_DEPLOYED_SITE_URL/sitemap.xml
+ 
