@@ -24,7 +24,7 @@ export function formatTimeISO(unixTime: number): string {
 
 export function formatCommentCount(count: number): string {
   if (count === 0) {
-    return "0 comments"; // Or 'Discuss', depending on preference
+    return "0 comments";
   } else if (count === 1) {
     return "1 comment";
   } else {
