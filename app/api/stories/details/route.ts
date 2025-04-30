@@ -3,8 +3,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { HN_API_URL, HNStory } from "@/types/hn";
 
-// API Route Handler (for App Router)
-// This function handles POST requests to /api/stories/details
 export async function POST(request: NextRequest) {
   let itemIds: number[];
 
@@ -49,19 +47,14 @@ export async function POST(request: NextRequest) {
   return NextResponse.json(validStories);
 }
 
-export async function fetchItemDetails(id: number): Promise<HNStory | null> {
-  // Construct the API URL for a specific item
+async function fetchItemDetails(id: number): Promise<HNStory | null> {
   const url = `${HN_API_URL}/item/${id}.json`;
-  // console.log(`Fetching item details from: ${url}`); // Optional: Log each item fetch
 
   try {
     const response = await fetch(url, {
-      // *** Add caching/revalidation option here ***
       // Cache data for individual item details.
       // Since details are mostly static, a longer cache time is appropriate.
-      next: { revalidate: 3600 }, // Cache data for 1 hour (adjust as needed)
-      // You could also use cache: 'force-cache' if you never expect details to change
-      // but revalidate allows for potential updates if HN API changes behavior.
+      next: { revalidate: 3600 },
     });
 
     // Check if the response is OK
@@ -69,7 +62,7 @@ export async function fetchItemDetails(id: number): Promise<HNStory | null> {
       console.error(
         `Error fetching item details for ID ${id}: ${response.status} ${response.statusText}`,
       );
-      return null; // Return null if the fetch failed
+      return null;
     }
 
     // Parse the JSON response
@@ -86,29 +79,27 @@ export async function fetchItemDetails(id: number): Promise<HNStory | null> {
       item.score === undefined ||
       item.descendants === undefined
     ) {
-      // console.warn(`Item with ID ${id} is not a valid story or missing data:`, item);
-      return null; // Return null if it's not a valid story item
+      console.warn(
+        `Item with ID ${id} is not a valid story or missing data:`,
+        item,
+      );
+      return null;
     }
 
-    // Cast the item to the HNStory type (assuming it matches the interface)
-    // Note: The HN API might return other properties not in HNStory, which is fine.
     const story: HNStory = {
       id: item.id,
       title: item.title,
-      url: item.url, // URL might be missing for Ask HN or internal stories
+      url: item.url,
       score: item.score,
       descendants: item.descendants,
       time: item.time,
       by: item.by,
-      // Add other properties from HNStory if needed and available in the API response
-      // e.g., text: item.text, // for Ask HN stories
-      // kids: item.kids, // for comments
     };
 
     return story;
   } catch (error) {
     // Catch any network or other errors during the fetch
     console.error(`Failed to fetch item details for ID ${id}:`, error);
-    return null; // Return null in case of an error
+    return null;
   }
 }
