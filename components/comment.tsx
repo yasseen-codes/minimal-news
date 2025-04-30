@@ -7,7 +7,7 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 import { formatTimeAgo } from "@/lib/utils";
 import { HNCommentItem } from "@/types/hn";
 
-const Comment: React.FC<{ comment: HNCommentItem }> = ({ comment }) => {
+function Comment({ comment }: { comment: HNCommentItem }) {
   // Start with replies folded by default
   const [showReplies, setShowReplies] = useState(false);
 
@@ -61,12 +61,10 @@ const Comment: React.FC<{ comment: HNCommentItem }> = ({ comment }) => {
       )}
     </div>
   );
-};
+}
 
-// This component maps over an array of top-level comments (HNCommentItem[])
-export const Comments: React.FC<{ comments: HNCommentItem[] }> = ({
-  comments,
-}) => {
+// This component maps over an array of top-level
+export function Comments({ comments }: { comments: HNCommentItem[] }) {
   // Filter out any nulls just in case
   const validComments = comments.filter(
     (comment): comment is HNCommentItem => comment !== null,
@@ -80,4 +78,4 @@ export const Comments: React.FC<{ comments: HNCommentItem[] }> = ({
       ))}
     </div>
   );
-};
+}
