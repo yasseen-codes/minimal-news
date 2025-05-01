@@ -12,7 +12,7 @@ function Layout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="flex flex-col justify-evenly overflow-ellipsis">
+    <div className="flex min-h-screen flex-col justify-between">
       <header className="mx-4 my-4 flex items-center justify-between p-2 md:mx-25 md:my-10">
         <Link href="/top/1">
           <Logo />
