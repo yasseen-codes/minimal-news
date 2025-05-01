@@ -13,7 +13,7 @@ export function BackButton() {
     <Button
       variant="outline"
       onClick={() => router.back()}
-      className="md:hover:text-foreground md:hover:bg-muted active:bg-muted active:text-foreground dark:active:bg-card-foreground/15 flex items-center gap-1 transition-colors"
+      className="hover:text-foreground hover:bg-muted active:bg-muted active:text-foreground dark:active:bg-card-foreground/15 dark:hover:bg-card-foreground/15 flex items-center gap-1 transition-colors"
     >
       <ArrowLeft size={16} />
       Back
