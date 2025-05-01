@@ -146,7 +146,7 @@ export default function Nav() {
             variant="outline"
             size="default"
             className={cn(
-              "md:hover:bg-muted md:hover:text-foreground flex items-center gap-2 text-sm hover:cursor-pointer md:text-base",
+              "hover:bg-muted hover:text-foreground flex items-center gap-2 text-sm hover:cursor-pointer md:text-base",
               // Add a class to disable pointer events if not on a valid route page
               currentRouteType === "details" || currentRouteType === "404"
                 ? "pointer-events-none opacity-80"
@@ -156,6 +156,8 @@ export default function Nav() {
             disabled={
               currentRouteType === "details" || currentRouteType === "404"
             }
+            // to prevent focus on click
+            onMouseDown={(e) => e.preventDefault()}
           >
             {/* Icon and label for the current route type */}
             <div className="flex items-center gap-2">

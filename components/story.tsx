@@ -36,7 +36,7 @@ export function Story({ id, title, url, upvotes, comments, date }: StoryProps) {
   ];
 
   return (
-    <article className="border-border md:hover:border-accent focus-visible:ring-ring active:border-accent relative w-full overflow-clip border-b py-4 transition-all duration-300 ease-in-out focus:outline-none focus-visible:ring-2">
+    <article className="border-border md:hover:border-accent focus-visible:ring-ring active:border-accent relative w-full border-b py-4 overflow-ellipsis transition-all duration-300 ease-in-out focus:outline-none focus-visible:ring-2">
       <div className="flex flex-col">
         <Link href={`/story/${id}`}>
           <h3 className="text-foreground md:hover:text-primary active:text-primary block font-serif text-lg font-medium text-pretty transition-colors duration-300 md:text-xl">

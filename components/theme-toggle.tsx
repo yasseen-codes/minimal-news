@@ -27,7 +27,7 @@ function ThemeToggle() {
   return (
     <Toggle
       variant="outline"
-      className="group md:data-[state=on]:hover:bg-muted data-[state=on]:bg-card active:bg-muted dark:data-[state=on]:active:bg-card-foreground/15 size-9 shadow-xs transition-colors hover:cursor-pointer"
+      className="group md:data-[state=on]:hover:bg-muted data-[state=on]:bg-card active:bg-muted dark:data-[state=on]:active:bg-card-foreground/15 dark:data-[state=on]:hover:bg-card-foreground/15 size-9 shadow-xs transition-colors hover:cursor-pointer"
       pressed={resolvedTheme === "dark"}
       onPressedChange={() => {
         setTheme(resolvedTheme === "dark" ? "light" : "dark");
