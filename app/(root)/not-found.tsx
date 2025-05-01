@@ -17,7 +17,7 @@ export default function NotFound() {
     <div className="flex min-h-[60vh] flex-col items-center justify-center text-center">
       <h2 className="mb-4 text-4xl font-bold">Not Found</h2>
       <p className="text-muted-foreground mb-6 text-lg">
-        Could not find the requested resource.
+        This Page Could Not Be Found.
       </p>
       <Link href="/top/1" className="text-primary hover:underline">
         Return Home

@@ -47,6 +47,7 @@ export default async function Page({
   const storiesPerPage = 30;
 
   const validRoutes: routeValue[] = ["top", "new", "ask", "show"];
+
   if (!validRoutes.includes(category)) {
     notFound();
   }
