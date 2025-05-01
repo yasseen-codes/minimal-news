@@ -95,6 +95,10 @@ export const metadata: Metadata = {
     // creator: '@yourtwitterhandle', // *** Replace with your Twitter handle ***
     images: [`${SITE_URL}/minimal-news-logo.png`], // *** Replace with your actual Twitter image URL ***
   },
+
+  verification: {
+    google: "FSiaE7Cy_Xz2BIOyDvxEWsrYlEfNaMMLspKbN6pSLE4",
+  },
 };
 
 export const viewport: Viewport = {
@@ -110,6 +114,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <meta
+          name="google-site-verification"
+          content="FSiaE7Cy_Xz2BIOyDvxEWsrYlEfNaMMLspKbN6pSLE4"
+        />
+      </head>
       <body
         className={` ${InterSans.variable} ${LibreBaskervilleSerif.variable} ${IBMPlexMono.variable} antialiased`}
       >
