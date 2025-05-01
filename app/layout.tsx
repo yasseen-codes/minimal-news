@@ -114,12 +114,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        <meta
-          name="google-site-verification"
-          content="FSiaE7Cy_Xz2BIOyDvxEWsrYlEfNaMMLspKbN6pSLE4"
-        />
-      </head>
       <body
         className={` ${InterSans.variable} ${LibreBaskervilleSerif.variable} ${IBMPlexMono.variable} antialiased`}
       >
