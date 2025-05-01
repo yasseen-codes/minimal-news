@@ -48,7 +48,7 @@ export function StoryDetailsSkeleton() {
       className={cn(
         "w-full rounded-lg border p-6 shadow-lg md:p-8",
         "space-y-4 md:space-y-6",
-        "animate-in slide-in-from-left duration-300",
+        "animate-in slide-in-from-left duration-500",
       )}
     >
       {/* Title Placeholder */}
