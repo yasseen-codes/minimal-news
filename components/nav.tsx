@@ -135,7 +135,7 @@ export default function Nav() {
     window.addEventListener("keydown", handleKeyDown);
 
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [router, validRouteKeys]);
+  }, [router]);
 
   return (
     <nav className="flex items-center gap-3">
