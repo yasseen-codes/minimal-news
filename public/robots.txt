@@ -12,5 +12,5 @@ Allow: /
 
 # Point to your sitemap file (we will create this next)
 # Replace YOUR_DEPLOYED_SITE_URL with your actual site URL
-Sitemap: YOUR_DEPLOYED_SITE_URL/sitemap.xml
+Sitemap: https://minimal-news-seven.vercel.app/sitemap.xml
  
