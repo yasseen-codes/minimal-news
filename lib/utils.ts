@@ -8,25 +8,34 @@ export function cn(...inputs: ClassValue[]) {
 export function formatTimeAgo(unixTime: number): string {
   const secondsAgo = Math.floor(Date.now() / 1000) - unixTime;
 
-  const minutes = Math.floor(secondsAgo / 60);
-  const hours = Math.floor(minutes / 60);
-  const days = Math.floor(hours / 24);
-  const weeks = Math.floor(days / 7);
-  const months = Math.floor(weeks / 4);
-  const years = Math.floor(months / 12);
+  // Define time intervals in seconds
+  const intervals = {
+    year: 31536000,
+    month: 2592000,
+    week: 604800,
+    day: 86400,
+    hour: 3600,
+    minute: 60,
+  };
 
-  if (years > 0) return `${years}y`;
-  if (months > 12) return `${Math.floor(months / 12)}y`;
+  // Calculate all time units at once
+  const values = {
+    year: Math.floor(secondsAgo / intervals.year),
+    month: Math.floor(secondsAgo / intervals.month),
+    week: Math.floor(secondsAgo / intervals.week),
+    day: Math.floor(secondsAgo / intervals.day),
+    hour: Math.floor(secondsAgo / intervals.hour),
+    minute: Math.floor(secondsAgo / intervals.minute),
+  };
 
-  if (months > 0) return `${months}mo`;
-  if (days > 30) return `${Math.floor(days / 30)}mo`;
+  // Find the most appropriate unit
+  if (values.year >= 1) return `${values.year}y`;
+  if (values.month >= 1) return `${values.month}mo`;
+  if (values.week >= 1) return `${values.week}w`;
+  if (values.day >= 1) return `${values.day}d`;
+  if (values.hour >= 1) return `${values.hour}h`;
+  if (values.minute >= 1) return `${values.minute}m`;
 
-  if (weeks > 0) return `${weeks}w`;
-  if (days > 7) return `${Math.floor(days / 7)}w`;
-
-  if (days > 0) return `${days}d`;
-  if (hours > 0) return `${hours}h`;
-  if (minutes > 0) return `${minutes}m`;
   return "just now";
 }
 
