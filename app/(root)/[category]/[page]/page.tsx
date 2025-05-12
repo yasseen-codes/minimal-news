@@ -12,7 +12,7 @@ import {
 } from "@/components/skeletons";
 
 import { routeValue } from "@/types/api";
-import Stories from "@/components/stories";
+import StoriesContent from "@/components/stories-content";
 import PaginationLoader from "@/components/pagination-loader";
 
 // This function runs on the server and generates metadata based on BOTH category and page params
@@ -78,7 +78,7 @@ export default async function Page({
       <Suspense
         fallback={<StoriesListSkeleton storiesPerPage={storiesPerPage} />}
       >
-        <Stories
+        <StoriesContent
           pageNumber={pageNumber}
           route={category}
           storiesPerPage={storiesPerPage}
