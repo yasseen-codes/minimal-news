@@ -10,7 +10,7 @@ async function fetchItemBasicDetails(id: number): Promise<HNStory | null> {
     const response = await fetch(url, {
       // Cache data for individual item details.
       // Since details are mostly static, a longer cache time is appropriate.
-      next: { revalidate: 3600 },
+      next: { revalidate: 900 },
     });
 
     // Check if the response is OK
