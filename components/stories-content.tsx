@@ -3,6 +3,7 @@
 "use client";
 
 import { useQuery, useQueries } from "@tanstack/react-query";
+import { storyKeys } from "@/lib/query-keys";
 
 import { fetchStoryListIds, fetchStory } from "@/lib/data";
 import { Story } from "@/components/story";
@@ -10,15 +11,6 @@ import { StoriesListSkeleton } from "@/components/skeletons";
 import { routeValue } from "@/types/api";
 import { HNStory } from "@/types/hn";
 import { formatTimeAgo } from "@/lib/utils";
-
-const storyKeys = {
-  // Key for fetching the list of story IDs for a specific route/category
-  // `as const` creates a readonly tuple
-  lists: (route: routeValue) => ["storyIds", route] as const,
-
-  // Key for fetching details of a single story
-  detailBasic: (id: number) => ["story-basic", id] as const,
-};
 
 type StoriesContentProps = {
   storiesPerPage: number;
