@@ -8,7 +8,7 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 const MAX_STORY_IDS_TO_PROCESS = 300;
 
 // Function to fetch a single story item by its ID from our INTERNAL API route /api/story/[id]
-export async function fetchStory(id: string): Promise<HNStoryItem | null> {
+export async function fetchStory(id: string): Promise<HNStoryItem> {
   const apiRoute = `${SITE_URL}/api/story/${id}`;
   console.log(`Fetching story details from: ${apiRoute}`);
 
@@ -18,12 +18,12 @@ export async function fetchStory(id: string): Promise<HNStoryItem | null> {
     if (!response.ok) {
       if (response.status === 404) {
         console.warn(`Story with ID ${id} not found via internal API route.`);
-        return null; // Indicate story not found
+        throw new Error("Story not found");
       }
       console.error(
         `Error fetching story details from internal API ${apiRoute}: ${response.status} ${response.statusText}`,
       );
-      return null;
+      throw new Error("Failed to fetch story details");
     }
 
     const storyItem: HNStoryItem = await response.json();
@@ -34,7 +34,7 @@ export async function fetchStory(id: string): Promise<HNStoryItem | null> {
         `Fetched item with ID ${id} is not a valid story from internal API:`,
         storyItem,
       );
-      return null;
+      throw new Error("Failed to fetch story details");
     }
 
     return storyItem;
@@ -43,14 +43,14 @@ export async function fetchStory(id: string): Promise<HNStoryItem | null> {
       `Failed to fetch story details for ID ${id} from internal API:`,
       error,
     );
-    return null;
+    throw new Error("Failed to fetch story details");
   }
 }
 
 // Function to fetch a list of story IDs (e.g., top, new, ask, show) from our INTERNAL API route /api/stories/[category]
 export async function fetchStoryListIds(
   category: routeValue,
-): Promise<number[] | null> {
+): Promise<number[]> {
   const apiRoute = `${SITE_URL}/api/stories/${category}`;
   console.log(`Fetching story IDs from internal API: ${apiRoute}`);
 
@@ -62,7 +62,7 @@ export async function fetchStoryListIds(
       console.error(
         `Error fetching story IDs from internal API ${apiRoute}: ${response.status} ${response.statusText}`,
       );
-      return null; // Return null on error
+      throw new Error("Failed to fetch story IDs");
     }
 
     const ids: number[] = await response.json();
@@ -72,7 +72,7 @@ export async function fetchStoryListIds(
       console.warn(
         `No story IDs returned from internal API for type: ${category}`,
       );
-      return [];
+      throw new Error("No story IDs found");
     }
 
     // We still limit the number of IDs processed here before fetching details
@@ -82,7 +82,7 @@ export async function fetchStoryListIds(
       `Failed to fetch story IDs for type ${category} from internal API:`,
       error,
     );
-    return null; // Return null in case of an error
+    throw new Error("Failed to fetch story IDs");
   }
 }
 
@@ -112,7 +112,7 @@ export async function fetchStoriesWithDetails(
       console.error(
         `Error fetching story details from internal API: ${response.status} ${response.statusText}`,
       );
-      return []; // Return empty array on error
+      throw new Error("Failed to fetch story details");
     }
 
     const stories: HNStory[] = await response.json();
@@ -121,12 +121,12 @@ export async function fetchStoriesWithDetails(
       console.error(
         `Internal API route ${detailsApiRoute} did not return an array.`,
       );
-      return [];
+      throw new Error("Failed to fetch story details");
     }
 
     return stories;
   } catch (error) {
     console.error(`Failed to fetch story details from internal API:`, error);
-    return []; // Return empty array in case of error
+    throw new Error("Failed to fetch story details");
   }
 }
