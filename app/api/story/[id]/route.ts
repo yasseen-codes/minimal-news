@@ -15,10 +15,19 @@ async function fetchItemBasicDetails(id: number): Promise<HNStory | null> {
 
     // Check if the response is OK
     if (!response.ok) {
+      if (response.status === 404) {
+        console.warn(`Item with ID ${id} not found on external API (404).`);
+        return null; // Return null if external API returns 404
+      }
+      // For other errors from the external API, throw an error.
       console.error(
-        `Error fetching item details for ID ${id}: ${response.status} ${response.statusText}`,
+        `Error fetching item details for ID ${id} from external API: ${response.status} ${response.statusText}`,
       );
-      return null;
+      const error = new Error(
+        `External API error fetching item ${id}: ${response.status} ${response.statusText}`,
+      );
+
+      throw error; // Throw error for non-404 failures from external API
     }
 
     // Parse the JSON response
@@ -32,6 +41,16 @@ async function fetchItemBasicDetails(id: number): Promise<HNStory | null> {
       !item.title ||
       item.time === undefined
     ) {
+      if (item && item.id) {
+        console.warn(
+          `Item with ID ${item.id} is not a valid story (${item.type || "unknown type"}) or missing essential data for basic details.`,
+        );
+      } else {
+        console.warn(
+          `Fetched item is null or missing ID/type for basic details.`,
+        );
+      }
+
       return null;
     }
 
@@ -71,14 +90,14 @@ export async function GET(
     const story = await fetchItemBasicDetails(storyId);
 
     if (story === null) {
-      return NextResponse.json(
-        { error: `Story with ID ${storyId} not found or is not a story` },
-        { status: 404 },
+      console.log(
+        `Item with ID ${storyId} treated as not found/not a story for basic details.`,
       );
+      return NextResponse.json(null, { status: 200 });
     }
 
     // Return the fetched basic story details as a JSON response
-    return NextResponse.json(story);
+    return NextResponse.json(story, { status: 200 });
   } catch (error) {
     console.error(
       `Error in /api/story/[id] GET handler for ID ${storyId}:`,
@@ -90,48 +109,3 @@ export async function GET(
     );
   }
 }
-
-/* export async function POST(request: NextRequest) {
-  let itemIds: number[];
-
-  try {
-    // Parse the request body to get the array of item IDs
-    const body = await request.json();
-
-    // Validate that the body is an array of numbers
-    if (!Array.isArray(body) || !body.every((id) => typeof id === "number")) {
-      return NextResponse.json(
-        {
-          error:
-            "Invalid request body. Expected an array of numbers (item IDs).",
-        },
-        { status: 400 },
-      );
-    }
-
-    itemIds = body;
-  } catch (error) {
-    // Handle errors during body parsing
-    console.error("Error parsing request body:", error);
-    return NextResponse.json({ error: "Invalid JSON body." }, { status: 400 });
-  }
-
-  // If no IDs are provided, return an empty array immediately
-  if (itemIds.length === 0) {
-    return NextResponse.json([]);
-  }
-
-  // Fetch details for all the provided item IDs concurrently
-  // Use Promise.all to wait for all fetch promises to settle
-  const itemPromises = itemIds.map((id) => fetchItemDetails(id));
-  const fetchedItems = await Promise.all(itemPromises);
-
-  // Filter out any items that failed to fetch or were not valid stories
-  const validStories: HNStory[] = fetchedItems.filter(
-    (item): item is HNStory => item !== null,
-  );
-
-  // Return the array of fetched and validated story details
-  return NextResponse.json(validStories);
-}
- */
