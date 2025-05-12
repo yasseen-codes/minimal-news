@@ -48,7 +48,6 @@ export function StoryDetailsSkeleton() {
       className={cn(
         "w-full rounded-lg border p-6 shadow-lg md:p-8",
         "space-y-4 md:space-y-6",
-        "animate-in slide-in-from-left duration-500",
       )}
     >
       {/* Title Placeholder */}
@@ -93,14 +92,14 @@ export function StoryDetailsSkeleton() {
 
 export function PaginationSkeleton() {
   return (
-    <div className="border-border mt-8 flex animate-pulse items-center justify-center gap-10">
-      <Skeleton className="h-4 w-20" />
-      <Skeleton className="h-4 w-6" />
-      <Skeleton className="h-4 w-6" />
-      <Skeleton className="h-4 w-6" />
-      <Skeleton className="h-4 w-6" />
-      <Skeleton className="h-4 w-6" />
-      <Skeleton className="h-4 w-20" />
+    <div className="mt-10 flex items-center justify-center gap-6 md:mt-15">
+      <Skeleton className="h-4 w-16" />
+      <div className="flex items-center gap-4">
+        <Skeleton className="h-4 w-6" />
+        <Skeleton className="h-4 w-6" />
+        <Skeleton className="h-4 w-6" />
+      </div>
+      <Skeleton className="h-4 w-16" />
     </div>
   );
 }

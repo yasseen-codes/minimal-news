@@ -61,38 +61,36 @@ export default async function PaginationLoader({
   const isNextDisabled = pageNumber >= totalPages;
 
   return (
-    <div className="mt-8">
-      <Pagination>
-        <PaginationContent>
-          <PaginationItem>
-            <PaginationPrevious
-              href={isPreviousDisabled ? "#" : `/${route}/${pageNumber - 1}`}
-              className={
-                isPreviousDisabled ? "pointer-events-none opacity-50" : ""
-              }
-            />
-          </PaginationItem>
+    <Pagination className="pt-10 md:pt-15">
+      <PaginationContent>
+        <PaginationItem>
+          <PaginationPrevious
+            href={isPreviousDisabled ? "#" : `/${route}/${pageNumber - 1}`}
+            className={
+              isPreviousDisabled ? "pointer-events-none opacity-50" : ""
+            }
+          />
+        </PaginationItem>
 
-          {/* Pagination Links */}
-          {pagesToDisplay.map((page) => (
-            <PaginationItem key={page}>
-              <PaginationLink
-                href={`/${route}/${page}`}
-                isActive={page === pageNumber}
-              >
-                {page}
-              </PaginationLink>
-            </PaginationItem>
-          ))}
-
-          <PaginationItem>
-            <PaginationNext
-              href={isNextDisabled ? "#" : `/${route}/${pageNumber + 1}`}
-              className={isNextDisabled ? "pointer-events-none opacity-50" : ""}
-            />
+        {/* Pagination Links */}
+        {pagesToDisplay.map((page) => (
+          <PaginationItem key={page}>
+            <PaginationLink
+              href={`/${route}/${page}`}
+              isActive={page === pageNumber}
+            >
+              {page}
+            </PaginationLink>
           </PaginationItem>
-        </PaginationContent>
-      </Pagination>
-    </div>
+        ))}
+
+        <PaginationItem>
+          <PaginationNext
+            href={isNextDisabled ? "#" : `/${route}/${pageNumber + 1}`}
+            className={isNextDisabled ? "pointer-events-none opacity-50" : ""}
+          />
+        </PaginationItem>
+      </PaginationContent>
+    </Pagination>
   );
 }
