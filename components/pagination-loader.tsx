@@ -67,7 +67,9 @@ export default async function PaginationLoader({
           <PaginationPrevious
             href={isPreviousDisabled ? "#" : `/${route}/${pageNumber - 1}`}
             className={
-              isPreviousDisabled ? "pointer-events-none opacity-50" : ""
+              isPreviousDisabled
+                ? "pointer-events-none opacity-50"
+                : "dark:hover:text-foreground"
             }
           />
         </PaginationItem>
@@ -78,6 +80,7 @@ export default async function PaginationLoader({
             <PaginationLink
               href={`/${route}/${page}`}
               isActive={page === pageNumber}
+              className="dark:hover:text-foreground"
             >
               {page}
             </PaginationLink>
@@ -87,7 +90,11 @@ export default async function PaginationLoader({
         <PaginationItem>
           <PaginationNext
             href={isNextDisabled ? "#" : `/${route}/${pageNumber + 1}`}
-            className={isNextDisabled ? "pointer-events-none opacity-50" : ""}
+            className={
+              isNextDisabled
+                ? "pointer-events-none opacity-50"
+                : "dark:hover:text-foreground"
+            }
           />
         </PaginationItem>
       </PaginationContent>
