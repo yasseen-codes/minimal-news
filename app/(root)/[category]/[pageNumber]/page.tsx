@@ -39,11 +39,11 @@ export default async function Page({
 }: {
   params: Promise<{
     category: routeValue;
-    page: string;
+    pageNumber: string;
   }>;
 }) {
   const category = (await params).category;
-  const pageNumber = parseInt((await params).page || "1");
+  const pageNumber = parseInt((await params).pageNumber || "1");
   const storiesPerPage = 30;
 
   const validRoutes: routeValue[] = ["top", "new", "ask", "show"];
