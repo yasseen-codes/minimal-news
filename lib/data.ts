@@ -74,16 +74,10 @@ export async function fetchStory(id: number): Promise<HNStory> {
       typeof story.title !== "string" ||
       typeof story.by !== "string"
     ) {
-      console.error(
+      console.warn(
         `Internal API route ${apiRoute} did not return a valid HNStory object for ID ${id}.`,
         story,
       );
-      // If the data format is unexpected, throw an error.
-      const error = new Error(
-        `API route ${apiRoute} did not return a valid HNStory format, response:${response.status || 500}`,
-      );
-
-      throw error;
     }
 
     return story;

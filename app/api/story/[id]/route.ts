@@ -90,7 +90,7 @@ export async function GET(
     const story = await fetchItemBasicDetails(storyId);
 
     if (story === null) {
-      console.log(
+      console.warn(
         `Item with ID ${storyId} treated as not found/not a story for basic details.`,
       );
       return NextResponse.json(null, { status: 200 });
