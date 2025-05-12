@@ -1,53 +1,13 @@
 // lib/data.ts
 
 import { routeValue } from "@/types/api";
-import { HNStory, HNStoryItem } from "@/types/hn";
+import { HNStory, HNItem } from "@/types/hn";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
 const MAX_STORY_IDS_TO_PROCESS = 300;
 
-// Function to fetch a single story item by its ID from our INTERNAL API route /api/story/[id]
-export async function fetchStory(id: string): Promise<HNStoryItem> {
-  const apiRoute = `${SITE_URL}/api/story/${id}`;
-  console.log(`Fetching story details from: ${apiRoute}`);
-
-  try {
-    const response = await fetch(apiRoute);
-
-    if (!response.ok) {
-      if (response.status === 404) {
-        console.warn(`Story with ID ${id} not found via internal API route.`);
-        throw new Error("Story not found");
-      }
-      console.error(
-        `Error fetching story details from internal API ${apiRoute}: ${response.status} ${response.statusText}`,
-      );
-      throw new Error("Failed to fetch story details");
-    }
-
-    const storyItem: HNStoryItem = await response.json();
-
-    // Ensure the fetched item is a valid story
-    if (!storyItem || storyItem.type !== "story") {
-      console.warn(
-        `Fetched item with ID ${id} is not a valid story from internal API:`,
-        storyItem,
-      );
-      throw new Error("Failed to fetch story details");
-    }
-
-    return storyItem;
-  } catch (error) {
-    console.error(
-      `Failed to fetch story details for ID ${id} from internal API:`,
-      error,
-    );
-    throw new Error("Failed to fetch story details");
-  }
-}
-
-// Function to fetch a list of story IDs (e.g., top, new, ask, show) from our INTERNAL API route /api/stories/[category]
+// Function to fetch a list of story IDs (e.g., top, new, ask, show)
 export async function fetchStoryListIds(
   category: routeValue,
 ): Promise<number[]> {
@@ -86,27 +46,18 @@ export async function fetchStoryListIds(
   }
 }
 
-// Function to fetch details for a batch of story IDs from our INTERNAL API route /api/stories/details
-export async function fetchStoriesWithDetails(
-  ids: number[],
-): Promise<HNStory[]> {
-  // If no IDs are provided, return an empty array immediately
-  if (ids.length === 0) {
-    return [];
+// Function to fetch basic story details
+export async function fetchStory(id: number): Promise<HNStory> {
+  if (!id || typeof id !== "number") {
+    throw new Error("Invalid story ID");
   }
-  const detailsApiRoute = `${SITE_URL}/api/stories/details`;
+  const apiRoute = `${SITE_URL}/api/story/${id}`;
   console.log(
-    `Fetching details for ${ids.length} stories from internal API: ${detailsApiRoute}`,
+    `Fetching details for story ID ${id} from internal API: ${apiRoute}`,
   );
 
   try {
-    // This fetch call targets your internal API route.
-    // Caching/revalidation is handled within your /api/stories/details/route.ts.
-    const response = await fetch(detailsApiRoute, {
-      method: "POST", // Use POST method as designed by your API route
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(ids),
-    });
+    const response = await fetch(apiRoute);
 
     if (!response.ok) {
       console.error(
@@ -115,18 +66,69 @@ export async function fetchStoriesWithDetails(
       throw new Error("Failed to fetch story details");
     }
 
-    const stories: HNStory[] = await response.json();
-    // Ensure returned data is an array (your API route should ensure this)
-    if (!Array.isArray(stories)) {
+    const story: HNStory = await response.json();
+    // Check if the returned object looks like a valid HNStory.
+    if (
+      !story ||
+      typeof story.id !== "number" ||
+      typeof story.title !== "string" ||
+      typeof story.by !== "string"
+    ) {
       console.error(
-        `Internal API route ${detailsApiRoute} did not return an array.`,
+        `Internal API route ${apiRoute} did not return a valid HNStory object for ID ${id}.`,
+        story,
+      );
+      // If the data format is unexpected, throw an error.
+      const error = new Error(
+        `API route ${apiRoute} did not return a valid HNStory format, response:${response.status || 500}`,
+      );
+
+      throw error;
+    }
+
+    return story;
+  } catch (error) {
+    console.error(`Failed to fetch story details from internal API:`, error);
+    throw new Error("Failed to fetch story details");
+  }
+}
+
+// Function to fetch  story details
+export async function fetchStoryDetails(id: string): Promise<HNItem> {
+  const apiRoute = `${SITE_URL}/api/story/details/${id}`;
+  console.log(`Fetching story details from: ${apiRoute}`);
+
+  try {
+    const response = await fetch(apiRoute);
+
+    if (!response.ok) {
+      if (response.status === 404) {
+        console.warn(`Story with ID ${id} not found via internal API route.`);
+        throw new Error("Story not found");
+      }
+      console.error(
+        `Error fetching story details from internal API ${apiRoute}: ${response.status} ${response.statusText}`,
       );
       throw new Error("Failed to fetch story details");
     }
 
-    return stories;
+    const storyItem: HNItem = await response.json();
+
+    // Ensure the fetched item is a valid story
+    if (!storyItem || storyItem.type !== "story") {
+      console.warn(
+        `Fetched item with ID ${id} is not a valid story from internal API:`,
+        storyItem,
+      );
+      throw new Error("Failed to fetch story details");
+    }
+
+    return storyItem;
   } catch (error) {
-    console.error(`Failed to fetch story details from internal API:`, error);
+    console.error(
+      `Failed to fetch story details for ID ${id} from internal API:`,
+      error,
+    );
     throw new Error("Failed to fetch story details");
   }
 }
