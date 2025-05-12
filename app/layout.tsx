@@ -7,6 +7,7 @@ import { SITE_URL } from "@/types/hn";
 // Importing the Vercel Analytics and Speed Insights components
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import QueryProvider from "@/components/query-provider";
 
 const InterSans = localFont({
   src: "../public/fonts/Inter/Inter-VariableFont_opsz,wght.ttf",
@@ -117,9 +118,11 @@ export default function RootLayout({
       <body
         className={` ${InterSans.variable} ${LibreBaskervilleSerif.variable} ${IBMPlexMono.variable} antialiased`}
       >
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          {children}
-        </ThemeProvider>
+        <QueryProvider>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            {children}
+          </ThemeProvider>
+        </QueryProvider>
         <Analytics />
         <SpeedInsights />
       </body>
