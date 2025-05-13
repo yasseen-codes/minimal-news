@@ -32,7 +32,6 @@ export default function PaginationLoader({
   const {
     data: allStoryIds,
     isLoading: isLoadingIds,
-    // isFetching: isFetchingIds,
     isError: isErrorIds,
     error: errorIds,
     isSuccess: isSuccessIds,
