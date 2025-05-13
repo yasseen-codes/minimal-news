@@ -63,9 +63,6 @@ export default function StoriesContent({
   });
 
   const isLoadingStories = storyQueries.some((query) => query.isLoading);
-  const isErrorStories = storyQueries.some((query) => query.isError);
-  // Find the first error object from the story queries
-  const firstErrorStories = storyQueries.find((query) => query.isError)?.error;
 
   // we show skeletons on the first load
   if (isLoadingIds || isLoadingStories) {
