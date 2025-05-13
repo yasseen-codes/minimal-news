@@ -38,7 +38,7 @@ function Comment({ comment }: { comment: HNCommentItem }) {
       />
       {/* Replies */}
       {/* Check if there are children comments to display */}
-      {comment.children && comment.children.length > 0 && (
+      {comment.replies && comment.replies.length > 0 && (
         <div className="mt-2">
           <button
             onClick={() => setShowReplies(!showReplies)}
@@ -47,12 +47,12 @@ function Comment({ comment }: { comment: HNCommentItem }) {
             {showReplies ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
             {showReplies
               ? "Collapse"
-              : `${comment.children.length} ${comment.children.length === 1 ? "reply" : "replies"}`}
+              : `${comment.replies.length} ${comment.replies.length === 1 ? "reply" : "replies"}`}
           </button>
           {showReplies && (
             <div className="mt-2 space-y-6">
               {/* Recursively render child comments */}
-              {comment.children.map((reply) => (
+              {comment.replies.map((reply) => (
                 <Comment key={reply.id} comment={reply} />
               ))}
             </div>
