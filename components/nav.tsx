@@ -148,9 +148,6 @@ export default function Nav() {
             className={cn(
               "hover:bg-muted hover:text-foreground flex items-center gap-2 text-sm hover:cursor-pointer md:text-base",
               // Add a class to disable pointer events if not on a valid route page
-              currentRouteType === "details" || currentRouteType === "404"
-                ? "pointer-events-none opacity-80"
-                : "",
             )}
             // Disable the button if not on a valid route page
             disabled={
