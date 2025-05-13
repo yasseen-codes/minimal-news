@@ -4,13 +4,12 @@ import { HNCommentItem, HNItem, HN_API_URL } from "@/types/hn";
 
 import { NextRequest, NextResponse } from "next/server";
 
-// Function to fetch details for a single item by its ID (recursive for comments)
-async function fetchItem(id: number): Promise<HNItem | HNCommentItem | null> {
+// Function to fetch details for a single item by its ID (recursive for comments/replies)
+async function fetchItem(id: number): Promise<HNItem | null> {
   const url = `${HN_API_URL}/item/${id}.json`;
 
   try {
     const response = await fetch(url, {
-      // Cache for 5 minutes
       next: { revalidate: 300 },
     });
 
@@ -23,22 +22,39 @@ async function fetchItem(id: number): Promise<HNItem | HNCommentItem | null> {
 
     const item: HNItem = await response.json();
 
+    // If the item is deleted or dead, we might not want to process it further
     if (!item || item.deleted || item.dead) {
       return null;
     }
 
-    // If the item has kids (comments), recursively fetch them
+    // If the item has kids (comment IDs), recursively fetch them
     if (item.kids && item.kids.length > 0) {
-      const commentsPromises = item.kids.map((kidId) => fetchItem(kidId));
-      const fetchedComments = await Promise.all(commentsPromises);
+      // Fetch all child items concurrently
+      const childPromises = item.kids.map((childId) => fetchItem(childId));
+      // Note: Using Promise.allSettled to handle both fulfilled and rejected promises
+      const fetchedChildrenResults = await Promise.allSettled(childPromises);
 
-      item.kids = fetchedComments
-        .filter((kid): kid is HNCommentItem => kid !== null)
-        .map((kid) => kid.id);
+      // Filter out rejected promises and null results from fulfilled promises
+      const validChildren: HNItem[] = fetchedChildrenResults
+        .filter(
+          (result) => result.status === "fulfilled" && result.value !== null,
+        ) // Extract the value from fulfilled results
+        .map((result) => (result as PromiseFulfilledResult<HNItem>).value);
 
-      (item as HNItem).comments = fetchedComments.filter(
-        (comment): comment is HNCommentItem => comment !== null,
-      );
+      if (item.type === "story") {
+        // If it's a story, assign top-level comments to the 'comments' property
+        item.comments = validChildren as HNCommentItem[];
+      } else if (item.type === "comment") {
+        // If it's a comment, assign replies to the 'replies' property
+        (item as HNCommentItem).replies = validChildren as HNCommentItem[];
+      }
+    } else {
+      // If no kids, ensure comments/replies properties are empty arrays or undefined
+      if (item.type === "story") {
+        item.comments = [];
+      } else if (item.type === "comment") {
+        (item as HNCommentItem).replies = [];
+      }
     }
 
     return item;
