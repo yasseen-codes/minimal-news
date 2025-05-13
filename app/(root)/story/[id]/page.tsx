@@ -3,7 +3,7 @@
 import { Suspense } from "react";
 import { SITE_URL } from "@/types/hn";
 import type { Metadata } from "next";
-import { fetchStory } from "@/lib/data";
+import { fetchStoryDetails } from "@/lib/data";
 
 import { BackButton } from "@/components/ui/back-button";
 import { StoryDetailsSkeleton } from "@/components/skeletons";
@@ -17,7 +17,7 @@ export default async function StoryPage({
   params: Promise<{ id: string }>;
 }) {
   // Get the story ID from the dynamic route segment
-  const storyId = (await params).id;
+  const storyId = parseInt((await params).id);
 
   return (
     <div className="container max-w-full space-y-4">
@@ -36,11 +36,11 @@ export async function generateMetadata({
 }: {
   params: Promise<{ id: string }>;
 }): Promise<Metadata> {
-  const storyId = (await params).id;
+  const storyId = parseInt((await params).id);
 
   // Fetch data for the story to use in metadata
   // Next.js automatically de-duplicates fetch calls for the same URL
-  const story = await fetchStory(storyId);
+  const story = await fetchStoryDetails(storyId);
 
   const title = story?.title || "Story Not Found";
 
