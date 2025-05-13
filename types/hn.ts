@@ -20,7 +20,7 @@ export interface HNCommentItem {
   text?: string; // Comment content (HTML)
   parent?: number; // Parent item ID
   kids?: number[]; // Array of child comment IDs (not used directly here, but part of HNItem)
-  comments?: HNCommentItem[]; // Nested comments (fetched recursively by API)
+  replies?: HNCommentItem[]; // Nested comments (fetched recursively by API)
   deleted?: boolean; // Indicates if the comment is deleted
   dead?: boolean; // Indicates if the comment is dead
 }
