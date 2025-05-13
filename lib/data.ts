@@ -88,7 +88,10 @@ export async function fetchStory(id: number): Promise<HNStory> {
 }
 
 // Function to fetch  story details
-export async function fetchStoryDetails(id: string): Promise<HNItem> {
+export async function fetchStoryDetails(id: number): Promise<HNItem> {
+  if (!id || typeof id !== "number") {
+    throw new Error("Invalid story ID");
+  }
   const apiRoute = `${SITE_URL}/api/story/details/${id}`;
   console.log(`Fetching story details from: ${apiRoute}`);
 
