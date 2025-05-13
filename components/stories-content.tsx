@@ -29,7 +29,7 @@ export default function StoriesContent({
   const {
     data: allStoryIds,
     isLoading: isLoadingIds, //  fetching for the first time
-    isFetching: isFetchingIds, //  fetching (initial or background)
+    // isFetching: isFetchingIds, //  fetching (initial or background)
     isError: isErrorIds,
     error: errorIds, // Error object if the query failed
   } = useQuery({
