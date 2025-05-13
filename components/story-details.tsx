@@ -6,14 +6,14 @@ import { Comments } from "./comment";
 import Link from "next/link";
 
 import { formatCommentCount, formatTimeAgo } from "@/lib/utils";
-import { HNStoryItem } from "@/types/hn";
+import { HNItem } from "@/types/hn";
 
-function StoryDetails({ story }: { story: HNStoryItem }) {
+function StoryDetails({ story }: { story: HNItem }) {
   // Use dangerouslySetInnerHTML for story text content (like Ask HN posts)
   const storyContent = { __html: story.text || "" };
 
-  // Get top-level comments from the story's children array
-  const topLevelComments = story.children || [];
+  // Get top-level comments from the story's comments array
+  const topLevelComments = story.comments || [];
 
   const commentCount = story.descendants ?? 0;
 
