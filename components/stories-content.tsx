@@ -154,7 +154,7 @@ export default function StoriesContent({
         {stories.map((story) => (
           <li key={story.id} className="w-full">
             <Story
-              id={story.id.toString()}
+              id={story.id}
               title={story.title}
               url={story.url || undefined}
               upvotes={story.score}
