@@ -14,6 +14,8 @@ import {
   Clock,
   MessageCircleQuestion,
   ChevronDown,
+  BookmarkPlus,
+  Bookmark,
 } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -53,6 +55,12 @@ const routeMap: {
     icon: <MessageCircleQuestion className="text-foreground h-4 w-4" />,
     label: "Ask",
     shortcut: "a",
+  },
+  favorites: {
+    path: "/favorites/1",
+    icon: <Bookmark className="text-foreground h-4 w-4" />,
+    label: "Favs",
+    shortcut: "f",
   },
 };
 
