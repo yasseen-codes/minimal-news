@@ -8,6 +8,7 @@ import { SITE_URL } from "@/types/hn";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import QueryProvider from "@/components/query-provider";
+import { Toaster } from "sonner";
 
 const InterSans = localFont({
   src: "../public/fonts/Inter/Inter-VariableFont_opsz,wght.ttf",
@@ -121,6 +122,7 @@ export default function RootLayout({
         <QueryProvider>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             {children}
+            <Toaster />
           </ThemeProvider>
         </QueryProvider>
         <Analytics />
