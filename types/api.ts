@@ -6,4 +6,4 @@ export type ApiResponse = {
   stories: HNStory[];
 };
 
-export type routeValue = "top" | "new" | "ask" | "show";
+export type routeValue = "top" | "new" | "ask" | "show" | "favorites";
