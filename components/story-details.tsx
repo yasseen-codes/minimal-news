@@ -7,6 +7,7 @@ import Link from "next/link";
 
 import { formatCommentCount, formatTimeAgo } from "@/lib/utils";
 import { HNItem } from "@/types/hn";
+import BookmarkButton from "./ui/bookmark-button";
 
 function StoryDetails({ story }: { story: HNItem }) {
   // Use dangerouslySetInnerHTML for story text content (like Ask HN posts)
@@ -23,10 +24,14 @@ function StoryDetails({ story }: { story: HNItem }) {
   return (
     <Card className="bg-background rounded-lg border p-6 shadow-lg md:p-8">
       <CardHeader className="p-0">
-        <CardTitle className="mb-2 font-serif text-base leading-tight font-bold md:text-2xl">
-          {story.title}
-        </CardTitle>
-
+        <div className="flex items-center justify-between">
+          <CardTitle className="mb-2 font-serif text-base leading-tight font-bold md:text-2xl">
+            {story.title}
+          </CardTitle>
+          <div className="hidden md:block">
+            <BookmarkButton />
+          </div>
+        </div>
         {story.url && hostname && (
           <Link
             href={story.url}
@@ -36,14 +41,19 @@ function StoryDetails({ story }: { story: HNItem }) {
           </Link>
         )}
 
-        <div className="text-muted-foreground flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-sm md:justify-between md:text-base">
-          {story.by ? (
-            <span>
-              by <span className="text-foreground font-bold">{story.by}</span>
-            </span>
-          ) : (
-            <div />
-          )}
+        <div className="text-muted-foreground flex flex-col gap-x-6 gap-y-2 font-mono text-sm md:flex-row md:items-center md:justify-between md:text-base">
+          <div className="flex items-center justify-between gap-2">
+            {story.by ? (
+              <span>
+                by <span className="text-foreground font-bold">{story.by}</span>
+              </span>
+            ) : (
+              <div />
+            )}
+            <div className="md:hidden">
+              <BookmarkButton />
+            </div>
+          </div>
           <div className="flex items-center gap-3 pr-0 text-xs md:gap-4 md:text-sm">
             {story.score !== undefined && (
               <span className="flex items-center gap-1">
