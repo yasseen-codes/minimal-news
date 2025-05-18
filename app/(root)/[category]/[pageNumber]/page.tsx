@@ -1,15 +1,9 @@
 // app/(root)/[category]/[page]/page.tsx
 
-import { Suspense } from "react";
 import type { Metadata, ResolvingMetadata } from "next";
 import { notFound } from "next/navigation";
 
 import { generateListPageMetadata } from "@/lib/metadata";
-
-import {
-  PaginationSkeleton,
-  StoriesListSkeleton,
-} from "@/components/skeletons";
 
 import { routeValue } from "@/types/api";
 import StoriesContentLoader from "@/components/stories-content-loader";
@@ -46,11 +40,13 @@ export default async function Page({
   const pageNumber = parseInt((await params).pageNumber || "1");
   const storiesPerPage = 30;
 
-  const validRoutes: routeValue[] = ["top", "new", "ask", "show"];
+  const validRoutes: routeValue[] = ["top", "new", "ask", "show", "favorites"];
 
   if (!validRoutes.includes(category)) {
     notFound();
   }
+
+  console.log(category);
 
   let pageTitle: string;
   switch (category) {
@@ -67,9 +63,14 @@ export default async function Page({
       pageTitle = "Show HN";
       break;
 
+    case "favorites":
+      pageTitle = "Favorite Stories";
+
     default:
-      pageTitle = "Minimal News";
+      pageTitle = "";
   }
+
+  console.log(pageTitle);
 
   return (
     <>

@@ -4,14 +4,6 @@ import type { Metadata, ResolvingMetadata } from "next";
 import { routeValue } from "@/types/api";
 import { SITE_URL } from "@/types/hn";
 
-/**
- * Dynamically generates metadata for the list pages (top, new, ask, show).
- *
- * @param route The route type ('top', 'new', 'ask', 'show').
- * @param page The current page number.
- * @param parent Optional parent metadata for extending.
- * @returns A Promise resolving to a Metadata object.
- */
 export async function generateListPageMetadata(
   route: routeValue,
   page: number,
@@ -32,8 +24,11 @@ export async function generateListPageMetadata(
       routeName = "Show HN";
       break;
 
+    case "favorites":
+      routeName = "Favorite Stories";
+
     default:
-      routeName = "Minimal News"; // Fallback name
+      routeName = "Minimal News";
   }
 
   // Uses the template from layout.tsx (e.g., "Top Stories - Page 2 | Minimal News")
