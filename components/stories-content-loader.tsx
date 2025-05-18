@@ -7,7 +7,7 @@ import { useQuery } from "@tanstack/react-query"; // Import useQuery hook
 import { storyKeys } from "@/lib/query-keys"; // Import query keys
 
 import { fetchStoryListIds } from "@/lib/data"; // Import the function to fetch story list IDs
-import { useFavoriteStore } from "@/stores/favorite-store"; // Import the Zustand favorite store hook (Adjust path if needed)
+import { useFavoriteStore } from "@/stores/favorite-store"; // Import the Zustand favorite store hook
 
 import { routeValue } from "@/types/api"; // Import routeValue type
 import StoriesContent from "./stories-content"; // Import the StoriesContent component

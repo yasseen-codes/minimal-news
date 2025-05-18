@@ -1,3 +1,5 @@
+"use client";
+
 import { fetchStory } from "@/lib/data";
 import { storyKeys } from "@/lib/query-keys";
 import { formatTimeAgo } from "@/lib/utils";
