@@ -1,51 +1,27 @@
-// components/StoriesContent.tsx
-
-"use client";
-
-import { useQuery, useQueries } from "@tanstack/react-query";
+import { fetchStory } from "@/lib/data";
 import { storyKeys } from "@/lib/query-keys";
-
-import { fetchStoryListIds, fetchStory } from "@/lib/data";
-import { Story } from "@/components/story";
-import { StoriesListSkeleton } from "@/components/skeletons";
-import { routeValue } from "@/types/api";
-import { HNStory } from "@/types/hn";
 import { formatTimeAgo } from "@/lib/utils";
+import { HNStory } from "@/types/hn";
+import { useQueries } from "@tanstack/react-query";
+import React from "react";
+import { StoriesListSkeleton } from "./skeletons";
+import { Story } from "./story";
 
-type StoriesContentProps = {
-  storiesPerPage: number;
-  pageNumber: number;
-  route: routeValue;
-};
-
-export default function StoriesContent({
+function StoriesContent({
+  storyIds,
   storiesPerPage,
-  pageNumber,
-  route,
-}: StoriesContentProps) {
-  const startIndex = (pageNumber - 1) * storiesPerPage;
-  const endIndex = startIndex + storiesPerPage;
-
-  const {
-    data: allStoryIds,
-    isLoading: isLoadingIds, //  fetching for the first time
-    // isFetching: isFetchingIds, //  fetching (initial or background)
-    isError: isErrorIds,
-    error: errorIds, // Error object if the query failed
-  } = useQuery({
-    queryKey: storyKeys.lists(route),
-    queryFn: () => fetchStoryListIds(route),
-    staleTime: 2 * 60 * 1000, // Data is considered fresh for 2 minutes
-    gcTime: 5 * 60 * 1000, // Data stays in cache for 5 minutes after last use
-    retry: 3,
-  });
-
-  const currentPageStoryIds = Array.isArray(allStoryIds)
-    ? allStoryIds.slice(startIndex, endIndex)
-    : [];
-
+  errorIds,
+  isLoadingIds,
+  isErrorIds,
+}: {
+  storyIds: number[];
+  storiesPerPage: number;
+  errorIds: Error | null;
+  isLoadingIds: boolean;
+  isErrorIds: boolean;
+}) {
   const storyQueries = useQueries({
-    queries: currentPageStoryIds.map((id) => ({
+    queries: storyIds.map((id) => ({
       queryKey: storyKeys.detailBasic(id),
 
       queryFn: async () => {
@@ -65,7 +41,7 @@ export default function StoriesContent({
   const isLoadingStories = storyQueries.some((query) => query.isLoading);
 
   // we show skeletons on the first load
-  if (isLoadingIds || isLoadingStories) {
+  if (isLoadingStories || isLoadingIds) {
     return (
       <section className="animate-in fade-in-35 flex flex-col gap-10 duration-300">
         <StoriesListSkeleton storiesPerPage={storiesPerPage} />
@@ -97,21 +73,7 @@ export default function StoriesContent({
     );
   }
 
-  if (!allStoryIds || allStoryIds.length === 0) {
-    return (
-      <section className="animate-in fade-in-35 flex flex-col gap-10 duration-300">
-        <ul className="flex max-w-full flex-col items-center gap-5">
-          <li className="text-muted-foreground w-full p-8 text-center text-base italic">
-            {" "}
-            {/* Added padding for visibility */}
-            No stories found for this category.
-          </li>
-        </ul>
-      </section>
-    );
-  }
-
-  if (currentPageStoryIds.length === 0) {
+  if (storyIds.length === 0) {
     return (
       // *** Preserved styling classes from the original section/ul ***
       <section className="animate-in fade-in-35 flex flex-col gap-10 duration-300">
@@ -133,7 +95,7 @@ export default function StoriesContent({
 
   // If after filtering, the stories array is empty, but we expected stories on this page
   // This could happen if fetching individual details failed for all IDs on the page.
-  if (stories.length === 0 && currentPageStoryIds.length > 0) {
+  if (stories.length === 0 && storyIds.length > 0) {
     return (
       <section className="animate-in fade-in-35 flex flex-col gap-10 duration-300">
         <ul className="flex max-w-full flex-col items-center gap-5">
@@ -167,3 +129,5 @@ export default function StoriesContent({
     </section>
   );
 }
+
+export default StoriesContent;
