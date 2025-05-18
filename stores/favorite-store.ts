@@ -19,7 +19,7 @@ interface FavoriteActions {
 }
 
 // Combine the state and actions types for the store
-type FavoriteStore = FavoriteState & FavoriteActions;
+export type FavoriteStore = FavoriteState & FavoriteActions;
 
 // Create the Zustand store
 export const useFavoriteStore = create<FavoriteStore>()(
@@ -123,5 +123,4 @@ export const useFavoriteStore = create<FavoriteStore>()(
 
 // Helper selector to check if a story is favorited outside of components if needed,
 // or directly use useFavoriteStore in components.
-export const isStoryFavorited = (storyId: number) =>
-  useFavoriteStore.getState().favoriteStoryIds.has(storyId);
+// export const isStoryFavorited = (storyId: number) => useFavoriteStore.getState().favoriteStoryIds.has(storyId);
