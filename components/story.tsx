@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Clock, MessageCircleMore, CircleArrowUp } from "lucide-react";
-import BookmarkButton from "./ui/bookmark-button";
+import FavoriteButton from "./ui/favorite-button";
 
 type StoryProps = {
   id: number;
@@ -46,7 +46,7 @@ export function Story({ id, title, url, upvotes, comments, date }: StoryProps) {
             </h3>
           </Link>
           <div className="hidden md:block">
-            <BookmarkButton />
+            <FavoriteButton storyId={id} />
           </div>
         </div>
         <div className="md:flex md:items-center md:justify-between">
@@ -79,7 +79,7 @@ export function Story({ id, title, url, upvotes, comments, date }: StoryProps) {
               })}
             </div>
             <div className="md:hidden">
-              <BookmarkButton />
+              <FavoriteButton storyId={id} />
             </div>
           </div>
         </div>

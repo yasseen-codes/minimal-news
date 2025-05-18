@@ -7,7 +7,7 @@ import Link from "next/link";
 
 import { formatCommentCount, formatTimeAgo } from "@/lib/utils";
 import { HNItem } from "@/types/hn";
-import BookmarkButton from "./ui/bookmark-button";
+import FavoriteButton from "./ui/favorite-button";
 
 function StoryDetails({ story }: { story: HNItem }) {
   // Use dangerouslySetInnerHTML for story text content (like Ask HN posts)
@@ -29,7 +29,7 @@ function StoryDetails({ story }: { story: HNItem }) {
             {story.title}
           </CardTitle>
           <div className="hidden md:block">
-            <BookmarkButton />
+            <FavoriteButton storyId={story.id} />
           </div>
         </div>
         {story.url && hostname && (
@@ -51,7 +51,7 @@ function StoryDetails({ story }: { story: HNItem }) {
               <div />
             )}
             <div className="md:hidden">
-              <BookmarkButton />
+              <FavoriteButton storyId={story.id} />
             </div>
           </div>
           <div className="flex items-center gap-3 pr-0 text-xs md:gap-4 md:text-sm">
