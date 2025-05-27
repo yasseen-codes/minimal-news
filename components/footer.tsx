@@ -1,4 +1,4 @@
-// components/Footer.tsx
+// components/footer.tsx
 
 import { CodeXml, Github, Linkedin } from "lucide-react";
 import Link from "next/link";
