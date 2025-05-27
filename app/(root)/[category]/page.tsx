@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { notFound } from "next/navigation";
 import { routeValue } from "@/types/api";
 
-const validRoutes: routeValue[] = ["top", "new", "ask", "show"];
+const validRoutes: routeValue[] = ["top", "new", "ask", "show", "favorites"];
 
 // This page component handles requests to /top, /new, /ask, /show (without a page number)
 export default async function Page({
@@ -21,6 +21,5 @@ export default async function Page({
   }
 
   // If the category is valid, redirect to the first page of that category
-  // This is a standard practice for base category URLs.
   redirect(`/${category}/1`);
 }

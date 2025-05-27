@@ -46,15 +46,13 @@ export default async function Page({
     notFound();
   }
 
-  console.log(category);
-
   let pageTitle: string;
   switch (category) {
     case "top":
-      pageTitle = "Top Stories";
+      pageTitle = "Top HN";
       break;
     case "new":
-      pageTitle = "New Stories";
+      pageTitle = "New HN";
       break;
     case "ask":
       pageTitle = "Ask HN";
@@ -64,13 +62,12 @@ export default async function Page({
       break;
 
     case "favorites":
-      pageTitle = "Favorite Stories";
+      pageTitle = "Favorite HN";
+      break;
 
     default:
       pageTitle = "";
   }
-
-  console.log(pageTitle);
 
   return (
     <>
