@@ -1,14 +1,13 @@
-// components/PaginationLoader.tsx
+// components/pagination-loader.tsx
 
-"use client"; // This component uses hooks (useQuery, useFavoriteStore, useMemo), so it must be a Client Component
+"use client";
 
-import { useMemo } from "react"; // Import useMemo hook
-import { useQuery } from "@tanstack/react-query"; // Import useQuery hook
-import { storyKeys } from "@/lib/query-keys"; // Import query keys
+import { useQuery } from "@tanstack/react-query";
+import { storyKeys } from "@/lib/query-keys"; //
 
-import { routeValue } from "@/types/api"; // Import routeValue type
-import { fetchStoryListIds } from "@/lib/data"; // Import the function to fetch story list IDs
-import { useFavoriteStore } from "@/stores/favorite-store"; // Import the Zustand favorite store hook (Adjust path if needed)
+import { routeValue } from "@/types/api";
+import { fetchStoryListIds } from "@/lib/data";
+import { useFavoriteStore } from "@/stores/favorite-store";
 
 import {
   Pagination,
@@ -20,13 +19,12 @@ import {
 } from "@/components/ui/pagination";
 import { PaginationSkeleton } from "@/components/skeletons";
 
-const MAX_PAGINATION_LINKS = 5; // Maximum number of pagination links to display
+const MAX_PAGINATION_LINKS = 5;
 
-// Define the props for the PaginationLoader component
 type PaginationLoaderProps = {
-  storiesPerPage: number; // The number of stories to show per page
-  pageNumber: number; // The current page number (1-based)
-  // The route can now be a standard routeValue OR 'favorites'
+  storiesPerPage: number;
+  pageNumber: number;
+
   route: routeValue;
 };
 
@@ -37,27 +35,12 @@ export default function PaginationLoader({
   pageNumber,
   route,
 }: PaginationLoaderProps) {
-  // --- Conditional Logic: Get total count from Zustand for 'favorites' route ---
-  const isFavoritesRoute = route === "favorites";
-
-  // Use useFavoriteStore to get the favorite IDs if it's the favorites route
-  // The hook should only be called conditionally based on isFavoritesRoute
-  const favoriteStoryIdsSet = isFavoritesRoute
-    ? useFavoriteStore((state) => state.favoriteStoryIds)
-    : null;
-
-  // Memoize the array of favorite IDs from the Set
-  const favoriteStoryIdsArray = useMemo(
-    () => (favoriteStoryIdsSet ? Array.from(favoriteStoryIdsSet) : []),
-    [favoriteStoryIdsSet], // Recreate array only when the Set changes
+  const favoriteStoryIdsSet = useFavoriteStore(
+    (state) => state.favoriteStoryIds,
   );
 
-  // Determine the total number of stories from the favorite store if it's the favorites route
-  const totalStoriesFromFavorites = isFavoritesRoute
-    ? favoriteStoryIdsArray.length
-    : 0;
+  const isFavoritesRoute = route === "favorites";
 
-  // --- Fetch the list of story IDs from HN API for standard routes ---
   // Use useQuery only if it's NOT the favorites route
   const {
     data: allStoryIdsFromApi, // The fetched array of story IDs from API
@@ -71,17 +54,15 @@ export default function PaginationLoader({
     staleTime: 2 * 60 * 1000, // Data is considered fresh for 2 minutes
     gcTime: 5 * 60 * 1000, // Data stays in cache for 5 minutes after last use
     retry: 3, // Retry failed queries
-    enabled: !isFavoritesRoute, // *** Only run this query if it's NOT the favorites route ***
+    enabled: !isFavoritesRoute, // Only run this query if it's NOT the favorites route
   });
 
-  // --- Determine the total number of stories and state for pagination ---
   // If it's the favorites route, use the count from the store.
   // Otherwise, use the count from the API fetch result.
   const totalStories = isFavoritesRoute
-    ? totalStoriesFromFavorites
+    ? favoriteStoryIdsSet.size
     : (allStoryIdsFromApi?.length ?? 0);
 
-  // Determine loading and error states
   // Loading/Error only applies to the API fetch, not the Zustand store access.
   const isLoadingIds = isLoadingIdsApi;
   const isErrorIds = isErrorIdsApi;
@@ -100,8 +81,6 @@ export default function PaginationLoader({
     return null; // Don't render pagination on error
   }
 
-  // If no total stories are available after a successful fetch (for API routes)
-  // OR if there are no favorite stories (for favorites route).
   if (totalStories === 0) {
     // Log a warning if no IDs are available after a successful fetch for API routes
     if (
@@ -114,11 +93,10 @@ export default function PaginationLoader({
       );
     }
     // Log a warning if no favorite stories are found for the favorites route
-    if (isFavoritesRoute && totalStoriesFromFavorites === 0) {
+    if (isFavoritesRoute && totalStories === 0) {
       console.warn("No favorite story IDs available for pagination.");
     }
-    // Don't render pagination if there are no stories
-    return null;
+    return null; // Don't render pagination if there are no stories
   }
 
   // Calculate total pages based on the total number of stories.
@@ -141,13 +119,18 @@ export default function PaginationLoader({
   // Generate an array of page numbers to display in the pagination links.
   const adjustedStartPage = Math.max(1, endPage - MAX_PAGINATION_LINKS + 1);
 
-  // Determine if previous/next buttons should be disabled based on the current page number.
+  // Ensure we don't go below 1
   const pagesToDisplay = Array.from(
     { length: endPage - adjustedStartPage + 1 },
     (_, i) => adjustedStartPage + i,
   );
+
+  // Determine if previous/next buttons should be disabled based on the current page number.
   const isPreviousDisabled = pageNumber <= 1;
   const isNextDisabled = pageNumber >= totalPages;
+
+  // Determine the base path for pagination links
+  const basePath = isFavoritesRoute ? "/favorites" : `/${route}`;
 
   return (
     // Add a key based on route and pageNumber to force re-render when navigating
@@ -157,7 +140,7 @@ export default function PaginationLoader({
         <PaginationContent>
           <PaginationItem>
             <PaginationPrevious
-              href={isPreviousDisabled ? "#" : `/${route}/${pageNumber - 1}`}
+              href={isPreviousDisabled ? "#" : `${basePath}/${pageNumber - 1}`}
               className={
                 isPreviousDisabled
                   ? "pointer-events-none opacity-50"
@@ -165,10 +148,11 @@ export default function PaginationLoader({
               }
             />
           </PaginationItem>
+
           {pagesToDisplay.map((p) => (
             <PaginationItem key={p}>
               <PaginationLink
-                href={`/${route}/${p}`}
+                href={`${basePath}/${p}`}
                 isActive={p === pageNumber}
                 className="dark:hover:text-foreground"
               >
@@ -176,9 +160,10 @@ export default function PaginationLoader({
               </PaginationLink>
             </PaginationItem>
           ))}
+
           <PaginationItem>
             <PaginationNext
-              href={isNextDisabled ? "#" : `/${route}/${pageNumber + 1}`}
+              href={isNextDisabled ? "#" : `${basePath}/${pageNumber + 1}`}
               className={
                 isNextDisabled
                   ? "pointer-events-none opacity-50"
