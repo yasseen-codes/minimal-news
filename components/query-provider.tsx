@@ -1,4 +1,4 @@
-// components/QueryProvider.tsx
+// components/query-provider.tsx
 
 "use client";
 
