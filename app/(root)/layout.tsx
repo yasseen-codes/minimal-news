@@ -23,6 +23,7 @@ function Layout({
         </div>
       </header>
       <main className="mx-4 my-6 p-2 md:mx-25 md:my-10">{children}</main>
+      {/* TODO: fix the footer position by making the body take 50% height */}
       <Footer />
     </>
   );
