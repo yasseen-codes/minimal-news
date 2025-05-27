@@ -1,12 +1,10 @@
 // app/(root)/story/[id]/page.tsx
 
-import { Suspense } from "react";
 import { SITE_URL } from "@/types/hn";
 import type { Metadata } from "next";
 import { fetchStoryDetails } from "@/lib/data";
 
 import { BackButton } from "@/components/ui/back-button";
-import { StoryDetailsSkeleton } from "@/components/skeletons";
 import StoryDetailsLoader from "@/components/story-details-loader";
 
 import { formatTimeISO } from "@/lib/utils";
@@ -23,9 +21,7 @@ export default async function StoryPage({
     <div className="container max-w-full space-y-4">
       <BackButton />
 
-      <Suspense fallback={<StoryDetailsSkeleton />}>
-        <StoryDetailsLoader storyId={storyId} />
-      </Suspense>
+      <StoryDetailsLoader storyId={storyId} />
     </div>
   );
 }
