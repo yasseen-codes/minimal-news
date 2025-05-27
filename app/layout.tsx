@@ -48,6 +48,9 @@ export const metadata: Metadata = {
     "minimalist",
     "eye-relaxed theme",
     "hcker news",
+    "hackernews",
+    "minimal news",
+    "minimal-news",
   ],
   // Information about the author(s).
   authors: [
@@ -55,29 +58,28 @@ export const metadata: Metadata = {
       name: "Yasseen Abo Rasheed",
       url: "https://linkedin.com/in/yasseen-aborasheed-11592a236",
     },
-  ], // *** Replace with your name and URL ***
+  ],
   // Information about the creator (often the same as author).
-  creator: "Yasseen Abo Rasheed", // *** Replace with your name ***
+  creator: "Yasseen Abo Rasheed",
   // Information about the publisher.
-  publisher: "Yasseen Abo Rasheed", // *** Replace with your name ***
+  publisher: "Yasseen Abo Rasheed",
 
   // --- Optional but Recommended Meta Tags ---
 
   // Canonical URL for the homepage (helps prevent duplicate content issues)
-  // Replace with your actual deployed site URL
-  metadataBase: new URL(SITE_URL), // *** Replace with your deployed site URL ***
+  metadataBase: new URL(SITE_URL),
 
   // Open Graph tags for social media sharing previews
   openGraph: {
     title: "Minimal News",
     description:
       "A minimal, fast, and eye-relaxed Hacker News reader built with Next.js and Tailwind CSS.",
-    url: "YOUR_DEPLOYED_SITE_URL", // *** Replace with your deployed site URL ***
+    url: SITE_URL,
     siteName: "Minimal News",
     images: [
       // Add a default image for social previews (e.g., your logo)
       {
-        url: `${SITE_URL}/minimal-news-logo.png`, // *** Replace with your actual OG image URL ***
+        url: `${SITE_URL}/minimal-news-logo.png`,
         width: 1200,
         height: 630,
         alt: "Minimal News Logo",
@@ -89,13 +91,12 @@ export const metadata: Metadata = {
 
   // Twitter Card tags for Twitter sharing previews
   twitter: {
-    card: "summary", // Or 'summary' for a smaller card
+    card: "summary",
     title: "Minimal News",
     description:
       "A minimal, fast, and eye-relaxed Hacker News reader built with Next.js and Tailwind CSS.",
-    // Add your Twitter handle if you have one
-    // creator: '@yourtwitterhandle', // *** Replace with your Twitter handle ***
-    images: [`${SITE_URL}/minimal-news-logo.png`], // *** Replace with your actual Twitter image URL ***
+
+    images: [`${SITE_URL}/minimal-news-logo.png`],
   },
 
   verification: {
