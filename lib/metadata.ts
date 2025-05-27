@@ -12,10 +12,10 @@ export async function generateListPageMetadata(
   let routeName: string;
   switch (route) {
     case "top":
-      routeName = "Top Stories";
+      routeName = "Top HN";
       break;
     case "new":
-      routeName = "New Stories";
+      routeName = "New HN";
       break;
     case "ask":
       routeName = "Ask HN";
@@ -25,7 +25,8 @@ export async function generateListPageMetadata(
       break;
 
     case "favorites":
-      routeName = "Favorite Stories";
+      routeName = "Favorite HN";
+      break;
 
     default:
       routeName = "Minimal News";
