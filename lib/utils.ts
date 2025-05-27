@@ -36,7 +36,7 @@ export function formatTimeAgo(unixTime: number): string {
   if (values.hour >= 1) return `${values.hour}h`;
   if (values.minute >= 1) return `${values.minute}m`;
 
-  return "just now";
+  return "now";
 }
 
 export function formatTimeISO(unixTime: number): string {
