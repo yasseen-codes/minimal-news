@@ -1,5 +1,5 @@
-// components/CategoryNav.tsx
-"use client"; // This component uses usePathname and useRouter, so it must be a Client Component
+// components/nav.tsx
+"use client";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -14,16 +14,14 @@ import {
   Clock,
   MessageCircleQuestion,
   ChevronDown,
-  BookmarkPlus,
   Bookmark,
 } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 import { cn } from "@/lib/utils";
-import { routeValue } from "@/types/api"; // Assuming routeValue is defined here
+import { routeValue } from "@/types/api";
 
-// Define the routes and their details
 const routeMap: {
   [key in routeValue]: {
     path: string;
@@ -171,13 +169,12 @@ export default function Nav() {
               )}
               <span className="font-sans font-medium">{displayLabel}</span>
             </div>
-            {/* Only show the ChevronDown icon if it's a valid route page (dropdown is active) */}
+
             {currentRouteType !== "details" && currentRouteType !== "404" && (
               <ChevronDown className="h-4 w-4" />
             )}
           </Button>
         </DropdownMenuTrigger>
-        {/* Only render the DropdownMenuContent if it's a valid route page */}
         {currentRouteType !== "details" && currentRouteType !== "404" && (
           <DropdownMenuContent
             className="animate-in fade-in-80 zoom-in-95 mr-2 w-56 p-1"
