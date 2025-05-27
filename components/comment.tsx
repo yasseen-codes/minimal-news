@@ -1,4 +1,4 @@
-// components/Comment.tsx
+// components/comment.tsx
 
 "use client";
 
