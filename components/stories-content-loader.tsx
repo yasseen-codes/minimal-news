@@ -1,23 +1,21 @@
-// components/StoriesContentLoader.tsx
+// components/stories-content-loader.tsx
 
-"use client"; // This component uses hooks (useQuery, useFavoriteStore, useMemo), so it must be a Client Component
+"use client";
 
-import { useMemo } from "react"; // Import useMemo hook
-import { useQuery } from "@tanstack/react-query"; // Import useQuery hook
-import { storyKeys } from "@/lib/query-keys"; // Import query keys
+import { useQuery } from "@tanstack/react-query";
+import { storyKeys } from "@/lib/query-keys";
 
-import { fetchStoryListIds } from "@/lib/data"; // Import the function to fetch story list IDs
-import { useFavoriteStore } from "@/stores/favorite-store"; // Import the Zustand favorite store hook
+import { fetchStoryListIds } from "@/lib/data";
+import { useFavoriteStore } from "@/stores/favorite-store";
 
-import { routeValue } from "@/types/api"; // Import routeValue type
-import StoriesContent from "./stories-content"; // Import the StoriesContent component
+import { routeValue } from "@/types/api";
+import StoriesContent from "./stories-content";
 
-// Define the props for the StoriesContentLoader component
 type StoriesContentLoaderProps = {
-  storiesPerPage: number; // The number of stories to show per page
-  pageNumber: number; // The current page number (1-based)
-  // The route can now be a standard routeValue OR 'favorites'
-  route: routeValue | "favorites"; // *** Updated route type to include 'favorites' ***
+  storiesPerPage: number;
+  pageNumber: number;
+
+  route: routeValue;
 };
 
 // This component fetches the list of story IDs (either from HN API or Zustand)
@@ -27,19 +25,12 @@ export default function StoriesContentLoader({
   pageNumber,
   route,
 }: StoriesContentLoaderProps) {
-  const isFavoritesRoute = route === "favorites";
-
-  const favoriteStoryIdsSet = isFavoritesRoute
-    ? useFavoriteStore((state) => state.favoriteStoryIds)
-    : null;
-
-  // Recreate array only when the Set changes
-  const favoriteStoryIdsArray = useMemo(
-    () => (favoriteStoryIdsSet ? Array.from(favoriteStoryIdsSet) : []),
-    [favoriteStoryIdsSet],
+  const favoriteStoryIdsSet = useFavoriteStore(
+    (state) => state.favoriteStoryIds,
   );
 
-  // --- Fetch the list of story IDs from HN API for standard routes ---
+  const isFavoritesRoute = route === "favorites";
+
   // Use useQuery only if it's NOT the favorites route
   const {
     data: allStoryIdsFromApi, // The fetched array of story IDs from API
@@ -55,17 +46,18 @@ export default function StoriesContentLoader({
     enabled: !isFavoritesRoute, // Only run this query if it's NOT the favorites route
   });
 
-  // --- Determine the final list of story IDs and state to pass down ---
+  // If it's the favorites route, use the data from the Zustand store.
+  // Otherwise, use the data from the API fetch result.
   const allStoryIds = isFavoritesRoute
-    ? favoriteStoryIdsArray
+    ? Array.from(favoriteStoryIdsSet)
     : allStoryIdsFromApi;
-  const isLoadingIds = isFavoritesRoute ? false : isLoadingIdsApi; // IDs from store are immediately available
-  const isErrorIds = isFavoritesRoute ? false : isErrorIdsApi; // Errors only apply to API fetch
-  const errorIds = isFavoritesRoute ? null : errorIdsApi; // Errors only apply to API fetch
 
-  // --- Determine the slice of story IDs for the current page ---
+  // Loading and Error states only apply to the API fetch.
+  const isLoadingIds = isFavoritesRoute ? false : isLoadingIdsApi;
+  const isErrorIds = isFavoritesRoute ? false : isErrorIdsApi;
+  const errorIds = isFavoritesRoute ? null : errorIdsApi;
+
   // This computation depends on the allStoryIds array being available.
-  // Use optional chaining (`?`) as allStoryIds might be undefined initially (for API fetch).
   const startIndex = (pageNumber - 1) * storiesPerPage;
   const endIndex = startIndex + storiesPerPage;
   // Slice the array of IDs only if allStoryIds is available and is an array
@@ -73,17 +65,14 @@ export default function StoriesContentLoader({
     ? allStoryIds.slice(startIndex, endIndex)
     : [];
 
-  // --- Render the StoriesContent component ---
   // Pass the current page's story IDs and the relevant state down.
   return (
     <StoriesContent
-      storyIds={currentPageStoryIds} // Pass the sliced list of IDs
-      storiesPerPage={storiesPerPage} // Pass stories per page
-      isLoadingIds={isLoadingIds} // Pass the determined loading state
-      isErrorIds={isErrorIds} // Pass the determined error state
-      errorIds={errorIds} // Pass the determined error object
-      // Note: StoriesContent now expects these specific props.
-      // It will handle fetching details for these IDs and rendering the list/states.
+      storyIds={currentPageStoryIds}
+      storiesPerPage={storiesPerPage}
+      isLoadingIds={isLoadingIds}
+      isErrorIds={isErrorIds}
+      errorIds={errorIds}
     />
   );
 }
