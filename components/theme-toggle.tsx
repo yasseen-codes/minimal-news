@@ -1,3 +1,5 @@
+// components/theme-toggle.tsx
+
 "use client";
 
 import { Toggle } from "@/components/ui/toggle";

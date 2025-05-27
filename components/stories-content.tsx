@@ -1,3 +1,5 @@
+// components/stories-content.tsx
+
 "use client";
 
 import { fetchStory } from "@/lib/data";
@@ -58,8 +60,6 @@ function StoriesContent({
       <section className="animate-in fade-in-35 flex flex-col gap-10 duration-300">
         <ul className="flex max-w-full flex-col items-center gap-5">
           <li className="text-destructive w-full p-8 text-center text-base italic">
-            {" "}
-            {/* Added padding for visibility */}
             <p className="mb-4 text-xl font-semibold">Error loading stories.</p>
             <p className="text-muted-foreground">Please try again later.</p>
             {/* Optionally display error details in development */}
@@ -77,12 +77,9 @@ function StoriesContent({
 
   if (storyIds.length === 0) {
     return (
-      // *** Preserved styling classes from the original section/ul ***
       <section className="animate-in fade-in-35 flex flex-col gap-10 duration-300">
         <ul className="flex max-w-full flex-col items-center gap-5">
           <li className="text-muted-foreground w-full p-8 text-center text-base italic">
-            {" "}
-            {/* Added padding for visibility */}
             No stories found on this page.
           </li>
         </ul>

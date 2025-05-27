@@ -1,4 +1,4 @@
-// components/Skeletons.tsx
+// components/skeletons.tsx
 
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";

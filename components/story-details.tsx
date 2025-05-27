@@ -1,4 +1,4 @@
-// components/StoryDetails.tsx
+// components/story-details.tsx
 
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { ArrowUpCircle, Clock, MessageCircleMore } from "lucide-react";

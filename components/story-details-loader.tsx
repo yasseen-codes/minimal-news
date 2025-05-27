@@ -1,4 +1,4 @@
-// components/StoryContentLoader.tsx
+// components/story-content-loader.tsx
 
 "use client";
 
