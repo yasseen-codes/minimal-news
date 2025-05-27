@@ -8,7 +8,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // but fetching ALL story IDs to list every single story might be too much.
   // We'll start by listing the main index pages and a few paginated pages.
 
-  const pageNumbers: number[] = [1, 2, 3];
+  const pageNumbers: number[] = [1, 2];
 
   // Map over the generated page numbers to create sitemap entries for 'top' stories
   const topStoriesPages: MetadataRoute.Sitemap = pageNumbers.map((page) => ({
